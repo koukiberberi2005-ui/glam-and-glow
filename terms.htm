@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terms & Privacy · Glam & Glow</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+
+  <!--------------------------------------------------------- HEADER --------------------------------------------------------->
+  <header id="header">
+    <div class="container">
+      <nav>
+        <a href="index.html"><img src="images/Logo.png" alt="Glam and Glow logo" class="logo" /></a>
+
+        <button class="menu-toggle" id="menu-toggle" aria-label="Open menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+
+        <ul id="nav-menu">
+          <li><a href="index.html#about">About Us</a></li>
+          <li><a href="index.html#services">Services</a></li>
+          <li><a href="index.html#gallery">Gallery</a></li>
+          <li><a href="dermalytics.htm">Dermalytics</a></li>
+          <li><a href="index.html#bookings">Bookings</a></li>
+          <li><a href="index.html#contact">Contact</a></li>
+          <li><a href="signin.htm" class="nav-cta">Sign in</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!--------------------------------------------------------- PAGE TITLE --------------------------------------------------------->
+  <section class="page-hero">
+    <h1 class="page-title">Terms &amp; Privacy</h1>
+    <p class="page-subtitle">How bookings work and what we do with your information.</p>
+  </section>
+
+  <!-- Draft text written for the project — have Pamela review it before real use. -->
+  <main class="page-content narrow">
+    <section class="panel prose">
+
+      <h2>Bookings</h2>
+      <p>You need an account to book. Online bookings are confirmed immediately and every treatment is a private one-to-one session with Pamela Nakad.</p>
+      <p>You can cancel or reschedule any upcoming appointment from <a href="account.htm">My Account</a> until it starts. Cancellations made less than 24 hours before the appointment are recorded as late cancellations, and reschedules made in that window are noted as late reschedules.</p>
+      <p>Treatments are paid at the clinic. The price shown when booking is the current price of the treatment.</p>
+
+      <h2>Your account</h2>
+      <p>To create an account we ask for your name, email, phone number and a password. Your password is stored encrypted by our hosting provider and is never visible to the clinic. You can update your name and phone number at any time from My Account.</p>
+
+      <h2>Dermalytics skin analysis</h2>
+      <p>Dermalytics is an automated tool that suggests what a skin concern may be from a photo. It is a recommendation, not a medical diagnosis, and does not replace an examination by a specialist or a doctor.</p>
+      <p>Photos you upload and their results are stored privately in your account. Only you and the clinic can see them.</p>
+
+      <h2>Website usage</h2>
+      <p>To improve the website and our services, we record how the website is used: which pages are opened, how long they stay open and actively used, which buttons and links are clicked, the type of device, and which website you came from. If you are signed in, this is linked to your account.</p>
+
+      <h2>Your information</h2>
+      <p>Your information is only used by Glam &amp; Glow to run the clinic and is never sold. To see, correct or delete your information, contact the clinic directly.</p>
+
+    </section>
+  </main>
+
+  <!--------------------------------------------------------- FOOTER --------------------------------------------------------->
+  <footer class="site-footer">
+    <img src="images/Logo.png" alt="Glam and Glow logo" class="footer-logo" />
+    <ul class="footer-links">
+      <li><a href="index.html#about">About Us</a></li>
+      <li><a href="index.html#services">Services</a></li>
+      <li><a href="index.html#gallery">Gallery</a></li>
+      <li><a href="index.html#bookings">Bookings</a></li>
+          <li><a href="index.html#contact">Contact</a></li>
+      <li><a href="terms.htm">Terms &amp; Privacy</a></li>
+    </ul>
+    <p>&copy; 2026 Glam & Glow · Kaslik, Lebanon</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/site.js"></script>
+  <script src="js/tracker.js"></script>
+
+  <script>
+    initMenu();
+    updateNavAccount();
+  </script>
+
+</body>
+</html>

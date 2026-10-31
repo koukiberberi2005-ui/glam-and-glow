@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>New Password · Glam & Glow</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+
+  <section class="signin-section">
+    <div class="signin-background">
+
+      <div class="signin-card">
+
+        <!-- LEFT VISUAL SIDE -->
+        <div class="signin-visual">
+          <img src="images/Logo.png" alt="Glam and Glow logo" />
+          <h2>Almost There</h2>
+          <p>Choose a new password for your account.</p>
+        </div>
+
+        <!-- RIGHT FORM SIDE -->
+        <div class="signin-form-side">
+          <h1>New Password</h1>
+          <p id="intro">Checking your reset link...</p>
+
+          <form id="reset-form" novalidate hidden>
+
+            <div class="input-box">
+              <label for="password">New Password</label>
+              <input type="password" id="password" name="password" placeholder="At least 8 characters" required minlength="8" />
+              <button type="button" class="toggle-pass" data-target="password">Show</button>
+            </div>
+
+            <div class="input-box">
+              <label for="confirm">Confirm Password</label>
+              <input type="password" id="confirm" name="confirm" placeholder="Repeat your password" required />
+              <button type="button" class="toggle-pass" data-target="confirm">Show</button>
+            </div>
+
+            <button type="submit" class="submit-btn">Save Password</button>
+
+            <p class="form-note" id="form-note"></p>
+          </form>
+
+          <a href="index.html" class="back-home">&#8592; Back to website</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/site.js"></script>
+
+  <script>
+    var form = document.getElementById("reset-form");
+    var intro = document.getElementById("intro");
+    var note = document.getElementById("form-note");
+    var submitBtn = form.querySelector(".submit-btn");
+
+    /* show / hide password */
+    document.querySelectorAll(".toggle-pass").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var input = document.getElementById(btn.dataset.target);
+        var hidden = input.type === "password";
+        input.type = hidden ? "text" : "password";
+        btn.textContent = hidden ? "Hide" : "Show";
+      });
+    });
+
+    /* the link in the email signs the user in for this one purpose */
+    function showForm() {
+      intro.textContent = "Choose a new password for your account.";
+      form.hidden = false;
+    }
+
+    sb.auth.onAuthStateChange(function (event) {
+      if (event === "PASSWORD_RECOVERY") showForm();
+    });
+
+    setTimeout(async function () {
+      if (!form.hidden) return;
+      if (await getSession()) showForm();
+      else intro.innerHTML = 'This reset link is invalid or has expired. <a href="forgot.htm">Request a new one</a>.';
+    }, 1500);
+
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      var password = document.getElementById("password").value;
+      var confirm = document.getElementById("confirm").value;
+
+      if (password.length < 8) {
+        note.textContent = "Password must be at least 8 characters.";
+        return;
+      }
+      if (password !== confirm) {
+        note.textContent = "The two passwords do not match.";
+        return;
+      }
+
+      submitBtn.disabled = true;
+      var result = await sb.auth.updateUser({ password: password });
+
+      if (result.error) {
+        note.textContent = errorMessage(result.error);
+        submitBtn.disabled = false;
+        return;
+      }
+
+      note.textContent = "Password saved. Taking you to your account...";
+      setTimeout(function () { location.href = "account.htm"; }, 1200);
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clinic Admin · Glam & Glow</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+
+  <!--------------------------------------------------------- HEADER --------------------------------------------------------->
+  <header id="header">
+    <div class="container">
+      <nav>
+        <a href="index.html"><img src="images/Logo.png" alt="Glam and Glow logo" class="logo" /></a>
+
+        <button class="menu-toggle" id="menu-toggle" aria-label="Open menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+
+        <ul id="nav-menu">
+          <li><a href="index.html#about">About Us</a></li>
+          <li><a href="index.html#services">Services</a></li>
+          <li><a href="index.html#gallery">Gallery</a></li>
+          <li><a href="dermalytics.htm">Dermalytics</a></li>
+          <li><a href="index.html#bookings">Bookings</a></li>
+          <li><a href="index.html#contact">Contact</a></li>
+          <li><a href="admin.htm" class="nav-cta">Admin</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!--------------------------------------------------------- PAGE TITLE --------------------------------------------------------->
+  <section class="page-hero">
+    <h1 class="page-title">Clinic Admin</h1>
+    <p class="page-subtitle">Mark who came and how they paid.</p>
+  </section>
+
+  <main class="page-content">
+
+    <!-- NOT THE ADMINISTRATOR -->
+    <section class="panel center" id="not-admin" hidden>
+      <h2 class="panel-title">This page is only for the clinic</h2>
+      <p>You are signed in with a client account.</p>
+      <div class="panel-actions">
+        <a href="account.htm" class="btn-glow">Go to My Account</a>
+      </div>
+    </section>
+
+    <div id="admin" hidden>
+
+      <!-- DAY PICKER + TOTALS -->
+      <section class="panel">
+        <div class="admin-toolbar">
+          <button type="button" class="cal-nav" id="prev-day" aria-label="Previous day">&#8249;</button>
+          <input type="date" id="day" aria-label="Day" />
+          <button type="button" class="cal-nav" id="next-day" aria-label="Next day">&#8250;</button>
+          <button type="button" class="btn-ghost small" id="today">Today</button>
+          <h2 class="admin-day-title" id="day-title"></h2>
+        </div>
+
+        <div class="admin-stats" id="stats"></div>
+      </section>
+
+      <!-- APPOINTMENTS OF THE DAY -->
+      <section class="panel">
+        <h2 class="panel-title">Appointments</h2>
+        <div id="list" class="appt-list"><p class="slots-note">Loading…</p></div>
+        <p class="form-note" id="note"></p>
+      </section>
+
+      <!-- CONTACT FORM MESSAGES -->
+      <section class="panel">
+        <h2 class="panel-title">Messages <span class="status-pill" id="unread-count" hidden></span></h2>
+        <div id="messages" class="appt-list"><p class="slots-note">Loading…</p></div>
+      </section>
+
+      <div class="panel-actions">
+        <button type="button" class="btn-ghost" id="signout">Sign Out</button>
+      </div>
+    </div>
+
+  </main>
+
+  <!--------------------------------------------------------- FOOTER --------------------------------------------------------->
+  <footer class="site-footer">
+    <img src="images/Logo.png" alt="Glam and Glow logo" class="footer-logo" />
+    <p>&copy; 2026 Glam & Glow · Kaslik, Lebanon</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/site.js"></script>
+
+  <script>
+    initMenu();
+
+    var METHODS = ["Cash", "Card", "Whish", "OMT", "Bank Transfer"];
+    var dayInput = document.getElementById("day");
+    var list = document.getElementById("list");
+    var note = document.getElementById("note");
+    var rows = [];
+
+    /* "2026-11-03" + "14:30:00" → has it started? */
+    function hasStarted(row) {
+      var t = row.appointment_time.split(":");
+      var d = parseDate(dayInput.value);
+      d.setHours(+t[0], +t[1], 0, 0);
+      return d <= new Date();
+    }
+
+    function money(value) {
+      return "$" + Number(value || 0).toFixed(0);
+    }
+
+    /* ===================== DAY ===================== */
+    function setDay(iso) {
+      dayInput.value = iso;
+      loadDay();
+    }
+
+    function moveDay(step) {
+      var d = parseDate(dayInput.value);
+      d.setDate(d.getDate() + step);
+      setDay(toIsoDate(d));
+    }
+
+    document.getElementById("prev-day").addEventListener("click", function () { moveDay(-1); });
+    document.getElementById("next-day").addEventListener("click", function () { moveDay(1); });
+    document.getElementById("today").addEventListener("click", function () { setDay(toIsoDate(new Date())); });
+    dayInput.addEventListener("change", function () { if (dayInput.value) loadDay(); });
+
+    async function loadDay() {
+      document.getElementById("day-title").textContent = formatDate(dayInput.value);
+      list.innerHTML = '<p class="slots-note">Loading…</p>';
+      note.textContent = "";
+
+      var result = await sb.rpc("admin_day", { p_date: dayInput.value });
+      if (result.error) {
+        list.innerHTML = '<p class="slots-note">' + escapeHtml(errorMessage(result.error)) + "</p>";
+        return;
+      }
+      rows = result.data;
+      renderStats();
+      renderList();
+    }
+
+    /* ===================== TOTALS ===================== */
+    function renderStats() {
+      var active = rows.filter(function (r) { return [1, 5, 6].indexOf(r.status_id) !== -1; });
+      var completed = rows.filter(function (r) { return r.status_id === 5; });
+      var noShows = rows.filter(function (r) { return r.status_id === 6; });
+      var collected = completed.reduce(function (sum, r) { return sum + Number(r.amount_paid || 0); }, 0);
+      var unconfirmed = completed.filter(function (r) { return r.is_validated === "N"; }).length;
+
+      var stats = [
+        [active.length, "Appointments"],
+        [completed.length, "Completed"],
+        [noShows.length, "No Shows"],
+        [money(collected), "Collected"],
+        [unconfirmed, "To confirm"]
+      ];
+      document.getElementById("stats").innerHTML = stats.map(function (s) {
+        return '<div class="stat"><span class="stat-number">' + s[0] + "</span><small>" + s[1] + "</small></div>";
+      }).join("");
+    }
+
+    /* ===================== APPOINTMENTS ===================== */
+    function renderList() {
+      if (!rows.length) {
+        list.innerHTML = '<p class="slots-note">No appointments on this day.</p>';
+        return;
+      }
+
+      list.innerHTML = rows.map(function (r, i) {
+        var html = '<article class="admin-card">' +
+          '<div class="appt-when"><strong>' + formatTime(r.appointment_time) + "</strong><span>until " + formatTime(r.end_time) + "</span></div>" +
+          '<div class="appt-what"><strong>' + escapeHtml(r.client_name) + "</strong>" +
+            '<span><a href="tel:' + escapeHtml(r.client_phone) + '">' + escapeHtml(r.client_phone) + "</a></span></div>" +
+          '<div class="appt-what"><strong>' + escapeHtml(r.service_name) + "</strong>" +
+            "<span>" + money(r.price_charged) + " · " + escapeHtml(r.booking_channel) +
+            (r.booking_reference ? " · " + escapeHtml(r.booking_reference) : "") + "</span>" +
+            (r.skin_analysis ? "<span>Skin analysis: " + escapeHtml(r.skin_analysis) + "</span>" : "") + "</div>" +
+          '<span class="status-pill status-' + r.status_id + '">' + escapeHtml(r.status_name) +
+            (r.is_test === "Y" ? " · Test" : "") + "</span>";
+
+        /* came or not? (only once the appointment has started) */
+        if ([1, 5, 6].indexOf(r.status_id) !== -1) {
+          if (hasStarted(r)) {
+            html += '<div class="admin-actions">' +
+              '<button type="button" class="btn-ghost small' + (r.status_id === 5 ? " chosen" : "") + '" data-attend="5" data-i="' + i + '">Completed</button>' +
+              '<button type="button" class="btn-ghost small danger' + (r.status_id === 6 ? " chosen" : "") + '" data-attend="6" data-i="' + i + '">No Show</button>' +
+            "</div>";
+          } else {
+            html += '<div class="admin-actions"><span class="slots-note">Upcoming</span></div>';
+          }
+        }
+
+        /* how did they pay? (completed appointments) */
+        if (r.status_id === 5) {
+          var status = r.payment_status === "Partial" ? "Partial" : (r.payment_status === "Completed" ? "Completed" : "Pending");
+          html += '<div class="pay-form" data-i="' + i + '">' +
+            '<select class="pay-status" aria-label="Payment">' +
+              '<option value="Completed"' + (status === "Completed" ? " selected" : "") + ">Paid</option>" +
+              '<option value="Partial"' + (status === "Partial" ? " selected" : "") + ">Paid part</option>" +
+              '<option value="Pending"' + (status === "Pending" ? " selected" : "") + ">Not paid</option>" +
+            "</select>" +
+            '<select class="pay-method" aria-label="Payment method">' +
+              METHODS.map(function (m) {
+                return '<option' + (m === (r.payment_method || "Cash") ? " selected" : "") + ">" + m + "</option>";
+              }).join("") +
+            "</select>" +
+            '<input type="number" class="pay-amount" min="1" step="1" placeholder="Amount $" aria-label="Amount paid"' +
+              (status === "Partial" ? ' value="' + Number(r.amount_paid) + '"' : " hidden") + " />" +
+            '<button type="button" class="btn-glow small pay-save">Save</button>' +
+            (r.payment_status === "Completed" && r.is_validated === "N"
+              ? '<span class="admin-badge">Assumed cash · not confirmed</span>'
+              : (r.payment_status ? '<span class="admin-badge ok">' + escapeHtml(r.payment_status === "Completed" ? "Paid " + money(r.amount_paid) : r.payment_status === "Partial" ? "Paid " + money(r.amount_paid) + " of " + money(r.price_charged) : "Not paid") + "</span>" : "")) +
+          "</div>";
+        }
+
+        return html + "</article>";
+      }).join("");
+
+      list.querySelectorAll("[data-attend]").forEach(function (btn) {
+        btn.addEventListener("click", function () { setAttendance(rows[+btn.dataset.i], +btn.dataset.attend); });
+      });
+
+      list.querySelectorAll(".pay-form").forEach(function (form) {
+        var statusSelect = form.querySelector(".pay-status");
+        var methodSelect = form.querySelector(".pay-method");
+        var amountInput = form.querySelector(".pay-amount");
+
+        function showFields() {
+          amountInput.hidden = statusSelect.value !== "Partial";
+          methodSelect.hidden = statusSelect.value === "Pending";
+        }
+        statusSelect.addEventListener("change", showFields);
+        showFields();
+
+        form.querySelector(".pay-save").addEventListener("click", function () {
+          savePayment(rows[+form.dataset.i], statusSelect.value, methodSelect.value, amountInput.value);
+        });
+      });
+    }
+
+    async function setAttendance(row, statusId) {
+      if (row.status_id === statusId) return;
+      if (statusId === 6 && !confirm("Mark " + row.client_name + " as No Show?")) return;
+
+      var result = await sb.rpc("admin_set_attendance", { p_appointment_id: row.appointment_id, p_status_id: statusId });
+      if (result.error) { note.textContent = errorMessage(result.error); return; }
+      loadDay();
+    }
+
+    async function savePayment(row, status, method, amount) {
+      var result = await sb.rpc("admin_set_payment", {
+        p_appointment_id: row.appointment_id,
+        p_payment_status: status,
+        p_payment_method: status === "Pending" ? null : method,
+        p_amount_paid: status === "Partial" ? Number(amount) : null
+      });
+      if (result.error) { note.textContent = errorMessage(result.error); return; }
+      loadDay();
+    }
+
+    /* ===================== MESSAGES (contact form) ===================== */
+    async function loadMessages() {
+      var box = document.getElementById("messages");
+      var result = await sb.rpc("admin_messages");
+      if (result.error) { box.innerHTML = '<p class="slots-note">' + escapeHtml(errorMessage(result.error)) + "</p>"; return; }
+
+      var unread = result.data.filter(function (m) { return m.is_read === "N"; }).length;
+      var counter = document.getElementById("unread-count");
+      counter.hidden = unread === 0;
+      counter.textContent = unread + " new";
+
+      if (!result.data.length) { box.innerHTML = '<p class="slots-note">No messages yet.</p>'; return; }
+
+      box.innerHTML = result.data.map(function (m) {
+        var sent = new Date(m.sent_at.replace(" ", "T")).toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+        return '<article class="message-card' + (m.is_read === "N" ? " unread" : "") + '">' +
+          "<header><strong>" + escapeHtml(m.full_name) + "</strong><span>" + sent + "</span></header>" +
+          '<span><a href="mailto:' + escapeHtml(m.email) + '">' + escapeHtml(m.email) + "</a>" +
+            (m.phone ? ' · <a href="tel:' + escapeHtml(m.phone) + '">' + escapeHtml(m.phone) + "</a>" : "") + "</span>" +
+          "<p>" + escapeHtml(m.message) + "</p>" +
+          (m.is_read === "N"
+            ? '<div class="admin-actions"><button type="button" class="btn-ghost small" data-read="' + m.message_id + '">Mark as read</button></div>'
+            : "") +
+        "</article>";
+      }).join("");
+
+      box.querySelectorAll("[data-read]").forEach(function (btn) {
+        btn.addEventListener("click", async function () {
+          await sb.rpc("admin_mark_message_read", { p_message_id: +btn.dataset.read });
+          loadMessages();
+        });
+      });
+    }
+
+    document.getElementById("signout").addEventListener("click", async function () {
+      await sb.auth.signOut();
+      location.href = "index.html";
+    });
+
+    /* ===================== START: administrator only ===================== */
+    requireSignIn().then(async function (session) {
+      if (!session) return;
+      var check = await sb.rpc("is_admin");
+      if (!check.data) {
+        document.getElementById("not-admin").hidden = false;
+        return;
+      }
+      document.getElementById("admin").hidden = false;
+      setDay(toIsoDate(new Date()));
+      loadMessages();
+    });
+  </script>
+
+</body>
+</html>

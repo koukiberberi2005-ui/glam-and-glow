@@ -1,0 +1,10 @@
+# customer data from the local PostgreSQL export — never publish
+database/data.sql
+database/dermalytics_full.sql
+
+# Pamela's certificate photos: not used on the site, not published
+Certifications/
+
+# secrets of the model API (set them in Railway instead)
+dermalytics-api/.env
+__pycache__/

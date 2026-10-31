@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Account · Glam & Glow</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+
+  <!--------------------------------------------------------- HEADER --------------------------------------------------------->
+  <header id="header">
+    <div class="container">
+      <nav>
+        <a href="index.html"><img src="images/Logo.png" alt="Glam and Glow logo" class="logo" /></a>
+
+        <button class="menu-toggle" id="menu-toggle" aria-label="Open menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+
+        <ul id="nav-menu">
+          <li><a href="index.html#about">About Us</a></li>
+          <li><a href="index.html#services">Services</a></li>
+          <li><a href="index.html#gallery">Gallery</a></li>
+          <li><a href="dermalytics.htm">Dermalytics</a></li>
+          <li><a href="index.html#bookings">Bookings</a></li>
+          <li><a href="index.html#contact">Contact</a></li>
+          <li><a href="account.htm" class="nav-cta">My Account</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!--------------------------------------------------------- PAGE TITLE --------------------------------------------------------->
+  <section class="page-hero">
+    <h1 class="page-title">My Account</h1>
+    <p class="page-subtitle" id="welcome">Loading your account…</p>
+  </section>
+
+  <main class="page-content">
+
+    <div class="account-grid">
+
+      <!-- DETAILS -->
+      <section class="panel">
+        <h2 class="panel-title">My Details</h2>
+
+        <form id="profile-form" class="panel-form" novalidate>
+          <div class="form-row">
+            <div class="input-box">
+              <label for="firstname">First Name</label>
+              <input type="text" id="firstname" required />
+            </div>
+            <div class="input-box">
+              <label for="lastname">Last Name</label>
+              <input type="text" id="lastname" required />
+            </div>
+          </div>
+
+          <div class="input-box">
+            <label for="email">Email</label>
+            <input type="email" id="email" disabled />
+          </div>
+
+          <div class="input-box">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" required />
+          </div>
+
+          <div class="panel-actions">
+            <button type="submit" class="btn-glow">Save Changes</button>
+            <button type="button" class="btn-ghost" id="signout">Sign Out</button>
+          </div>
+          <p class="form-note" id="profile-note"></p>
+        </form>
+      </section>
+
+      <!-- UPCOMING -->
+      <section class="panel">
+        <h2 class="panel-title">Upcoming Appointments</h2>
+        <div id="upcoming" class="appt-list"><p class="slots-note">Loading…</p></div>
+        <div class="panel-actions">
+          <a href="index.html#bookings" class="btn-glow">Book a Treatment</a>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- HISTORY -->
+    <section class="panel">
+      <h2 class="panel-title">Treatment History</h2>
+      <div id="history" class="appt-list"><p class="slots-note">Loading…</p></div>
+    </section>
+
+    <!-- SKIN ANALYSES -->
+    <section class="panel">
+      <h2 class="panel-title">My Skin Analyses</h2>
+      <div id="analyses" class="analysis-list"><p class="slots-note">Loading…</p></div>
+      <div class="panel-actions">
+        <a href="dermalytics.htm" class="btn-ghost">New Skin Analysis</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!--------------------------------------------------------- RESCHEDULE WINDOW --------------------------------------------------------->
+  <div class="modal" id="reschedule-modal" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="reschedule-title">
+      <button type="button" class="modal-close" id="reschedule-close" aria-label="Close">&times;</button>
+      <h3 class="panel-title" id="reschedule-title">Reschedule</h3>
+      <p class="modal-info" id="reschedule-info"></p>
+      <div id="reschedule-picker"></div>
+      <div class="booking-summary" id="reschedule-summary"></div>
+    </div>
+  </div>
+
+  <!--------------------------------------------------------- FOOTER --------------------------------------------------------->
+  <footer class="site-footer">
+    <img src="images/Logo.png" alt="Glam and Glow logo" class="footer-logo" />
+    <ul class="footer-links">
+      <li><a href="index.html#about">About Us</a></li>
+      <li><a href="index.html#services">Services</a></li>
+      <li><a href="index.html#gallery">Gallery</a></li>
+      <li><a href="index.html#bookings">Bookings</a></li>
+          <li><a href="index.html#contact">Contact</a></li>
+      <li><a href="terms.htm">Terms &amp; Privacy</a></li>
+    </ul>
+    <p>&copy; 2026 Glam & Glow · Kaslik, Lebanon</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/site.js"></script>
+  <script src="js/tracker.js"></script>
+  <script src="js/booking.js"></script>
+
+  <script>
+    initMenu();
+
+    var customer = null;
+    var appointments = [];
+    var LATE_HOURS = 24;
+
+    /* "2026-11-10" + "14:30:00" → Date */
+    function startOf(appt) {
+      var t = appt.appointment_time.split(":");
+      var d = parseDate(appt.appointment_date);
+      d.setHours(+t[0], +t[1], 0, 0);
+      return d;
+    }
+
+    function hoursUntil(appt) {
+      return (startOf(appt) - new Date()) / 3600000;
+    }
+
+    function serviceName(appt) {
+      return appt.services ? appt.services.service_name : "Treatment";
+    }
+
+    /* ===================== DETAILS ===================== */
+    async function loadProfile() {
+      var result = await sb.from("customers")
+        .select("customer_id, first_name, last_name, email, phone_number")
+        .single();
+
+      if (result.error) {
+        document.getElementById("welcome").textContent = "Your account could not be loaded. Please sign in again.";
+        return;
+      }
+      customer = result.data;
+      document.getElementById("welcome").textContent = "Welcome, " + customer.first_name + ".";
+      document.getElementById("firstname").value = customer.first_name;
+      document.getElementById("lastname").value = customer.last_name;
+      document.getElementById("email").value = customer.email;
+      document.getElementById("phone").value = customer.phone_number === "-" ? "" : customer.phone_number;
+    }
+
+    document.getElementById("profile-form").addEventListener("submit", async function (e) {
+      e.preventDefault();
+      var note = document.getElementById("profile-note");
+      var first = document.getElementById("firstname").value.trim();
+      var last = document.getElementById("lastname").value.trim();
+      var phone = document.getElementById("phone").value.trim();
+
+      if (first === "" || last === "") { note.textContent = "Please enter your first and last name."; return; }
+      if (phone.replace(/[^0-9]/g, "").length < 8) { note.textContent = "Please enter a valid phone number."; return; }
+
+      var result = await sb.from("customers")
+        .update({ first_name: first, last_name: last, phone_number: phone })
+        .eq("customer_id", customer.customer_id);
+
+      note.textContent = result.error ? errorMessage(result.error) : "Your details were saved.";
+      if (!result.error) document.getElementById("welcome").textContent = "Welcome, " + first + ".";
+    });
+
+    document.getElementById("signout").addEventListener("click", async function () {
+      await sb.auth.signOut();
+      location.href = "index.html";
+    });
+
+    /* ===================== APPOINTMENTS ===================== */
+    async function loadAppointments() {
+      var result = await sb.from("appointments")
+        /* "!fk_..." names the foreign key to follow, because these tables are also linked through website_interactions */
+        .select("appointment_id, service_id, appointment_date, appointment_time, end_time, price_charged, booking_reference, status_id, " +
+                "services!fk_appointments_service_id(service_name), appointment_status!fk_appointments_status_id(status_name)")
+        .order("appointment_date", { ascending: false })
+        .order("appointment_time", { ascending: false });
+
+      if (result.error) {
+        document.getElementById("upcoming").innerHTML = '<p class="slots-note">' + escapeHtml(errorMessage(result.error)) + "</p>";
+        document.getElementById("history").innerHTML = "";
+        return;
+      }
+      appointments = result.data;
+
+      var upcoming = appointments
+        .filter(function (a) { return a.status_id === 1 && startOf(a) > new Date(); })
+        .reverse();   /* soonest first */
+      var history = appointments.filter(function (a) { return upcoming.indexOf(a) === -1; });
+
+      document.getElementById("upcoming").innerHTML = upcoming.length
+        ? upcoming.map(function (a) {
+            return '<article class="appt-card">' +
+              '<div class="appt-when"><strong>' + formatDate(a.appointment_date) + "</strong>" +
+              "<span>" + formatTime(a.appointment_time) + " – " + formatTime(a.end_time) + "</span></div>" +
+              '<div class="appt-what"><strong>' + escapeHtml(serviceName(a)) + "</strong>" +
+              "<span>Ref. " + escapeHtml(a.booking_reference || "—") + " · $" + Number(a.price_charged) + "</span></div>" +
+              '<div class="appt-actions">' +
+                '<button type="button" class="btn-ghost small" data-reschedule="' + a.appointment_id + '">Reschedule</button>' +
+                '<button type="button" class="btn-ghost small danger" data-cancel="' + a.appointment_id + '">Cancel</button>' +
+              "</div></article>";
+          }).join("")
+        : '<p class="slots-note">No upcoming appointments.</p>';
+
+      document.getElementById("history").innerHTML = history.length
+        ? history.map(function (a) {
+            var status = a.appointment_status ? a.appointment_status.status_name : "";
+            if (a.status_id === 1) status = "Awaiting update";
+            return '<article class="appt-card past">' +
+              '<div class="appt-when"><strong>' + formatDate(a.appointment_date) + "</strong>" +
+              "<span>" + formatTime(a.appointment_time) + "</span></div>" +
+              '<div class="appt-what"><strong>' + escapeHtml(serviceName(a)) + "</strong>" +
+              "<span>$" + Number(a.price_charged) + "</span></div>" +
+              '<span class="status-pill status-' + a.status_id + '">' + escapeHtml(status) + "</span>" +
+              "</article>";
+          }).join("")
+        : '<p class="slots-note">Your past treatments will appear here.</p>';
+
+      document.querySelectorAll("[data-cancel]").forEach(function (btn) {
+        btn.addEventListener("click", function () { cancelAppointment(+btn.dataset.cancel); });
+      });
+      document.querySelectorAll("[data-reschedule]").forEach(function (btn) {
+        btn.addEventListener("click", function () { openReschedule(+btn.dataset.reschedule); });
+      });
+    }
+
+    function findAppointment(id) {
+      return appointments.find(function (a) { return a.appointment_id === id; });
+    }
+
+    async function cancelAppointment(id) {
+      var appt = findAppointment(id);
+      var question = "Cancel your " + serviceName(appt) + " on " + formatDate(appt.appointment_date) + " at " + formatTime(appt.appointment_time) + "?";
+      if (hoursUntil(appt) < LATE_HOURS) {
+        question += "\n\nIt is less than " + LATE_HOURS + " hours away, so it will be recorded as a late cancellation.";
+      }
+      if (!confirm(question)) return;
+
+      var result = await sb.rpc("cancel_appointment", { p_appointment_id: id });
+      if (result.error) { alert(errorMessage(result.error)); return; }
+
+      GGTrack.event("Appointment Action", { element: "cancel", pageUrl: "/book/cancel", appointmentId: id, serviceId: appt.service_id });
+      loadAppointments();
+    }
+
+    /* ===================== RESCHEDULE ===================== */
+    var modal = document.getElementById("reschedule-modal");
+    var rescheduleSummary = document.getElementById("reschedule-summary");
+    var rescheduling = null;
+    var newChoice = null;
+    var reschedulePicker = null;
+
+    function openReschedule(id) {
+      rescheduling = findAppointment(id);
+      newChoice = null;
+
+      var info = "Currently: " + serviceName(rescheduling) + " on " + formatDate(rescheduling.appointment_date) +
+        " at " + formatTime(rescheduling.appointment_time) + ". Pick a new day and time.";
+      if (hoursUntil(rescheduling) < LATE_HOURS) {
+        info += " This change is less than " + LATE_HOURS + " hours before the appointment and will be noted as a late reschedule.";
+      }
+      document.getElementById("reschedule-info").textContent = info;
+      rescheduleSummary.innerHTML = "";
+
+      reschedulePicker = GGBooking.createPicker(document.getElementById("reschedule-picker"), {
+        serviceId: rescheduling.service_id,
+        onPick: function (date, slot) { newChoice = { date: date, slot: slot }; renderRescheduleSummary(); },
+        onClear: function () { newChoice = null; renderRescheduleSummary(); }
+      });
+
+      modal.hidden = false;
+      document.body.classList.add("modal-open");
+    }
+
+    function closeReschedule() {
+      modal.hidden = true;
+      document.body.classList.remove("modal-open");
+    }
+
+    function renderRescheduleSummary(message) {
+      if (!newChoice) {
+        rescheduleSummary.innerHTML = message ? '<p class="form-note">' + escapeHtml(message) + "</p>" : "";
+        return;
+      }
+      rescheduleSummary.innerHTML =
+        "<p>New time: <strong>" + formatDate(newChoice.date) + " at " + formatTime(newChoice.slot.start_time) + "</strong></p>" +
+        '<button type="button" class="btn-glow" id="confirm-reschedule">Confirm New Time</button>';
+      document.getElementById("confirm-reschedule").addEventListener("click", confirmReschedule);
+    }
+
+    async function confirmReschedule() {
+      var btn = document.getElementById("confirm-reschedule");
+      btn.disabled = true;
+      btn.textContent = "Saving…";
+
+      var result = await sb.rpc("reschedule_appointment", {
+        p_appointment_id: rescheduling.appointment_id,
+        p_new_date: newChoice.date,
+        p_new_time: newChoice.slot.start_time
+      });
+
+      if (result.error) {
+        newChoice = null;
+        renderRescheduleSummary(errorMessage(result.error));
+        reschedulePicker.refresh();
+        return;
+      }
+
+      GGTrack.event("Appointment Action", {
+        element: "reschedule", pageUrl: "/book/reschedule",
+        appointmentId: result.data[0].appointment_id, serviceId: rescheduling.service_id
+      });
+      closeReschedule();
+      loadAppointments();
+    }
+
+    document.getElementById("reschedule-close").addEventListener("click", closeReschedule);
+    modal.addEventListener("click", function (e) { if (e.target === modal) closeReschedule(); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !modal.hidden) closeReschedule(); });
+
+    /* ===================== SKIN ANALYSES ===================== */
+    async function loadAnalyses() {
+      var box = document.getElementById("analyses");
+      var result = await sb.from("ml_classifications")
+        .select("classification_id, classified_at, predicted_class, confidence_score, review_required, image_uploads!fk_ml_classifications_image_id(file_path)")
+        .order("classified_at", { ascending: false });
+
+      if (result.error) { box.innerHTML = '<p class="slots-note">' + escapeHtml(errorMessage(result.error)) + "</p>"; return; }
+      if (!result.data.length) { box.innerHTML = '<p class="slots-note">You have no skin analyses yet.</p>'; return; }
+
+      /* the photos are private: temporary links valid for one hour */
+      var paths = result.data.map(function (r) { return r.image_uploads ? r.image_uploads.file_path : ""; });
+      var links = await sb.storage.from("skin-images").createSignedUrls(paths, 3600);
+      var urls = {};
+      (links.data || []).forEach(function (l) { if (l.signedUrl) urls[l.path] = l.signedUrl; });
+
+      box.innerHTML = result.data.map(function (r, i) {
+        var url = urls[paths[i]];
+        return '<article class="analysis-card">' +
+          (url ? '<img src="' + escapeHtml(url) + '" alt="Uploaded skin photo" loading="lazy">' : '<div class="analysis-noimg">No photo</div>') +
+          "<div>" +
+            "<strong>" + escapeHtml(r.predicted_class || "—") + "</strong>" +
+            "<span>" + Math.round(r.confidence_score * 100) + "% confidence</span>" +
+            "<span>" + new Date(r.classified_at.replace(" ", "T")).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) + "</span>" +
+            (r.review_required === "Y" ? '<span class="status-pill status-4">Needs specialist review</span>' : "") +
+            '<a class="btn-primary" href="index.html?service=1&analysis=' + r.classification_id + '#bookings">Book a consultation</a>' +
+          "</div></article>";
+      }).join("");
+    }
+
+    /* ===================== START ===================== */
+    requireSignIn().then(async function (session) {
+      if (!session) return;
+      if (await isAdmin()) { location.replace("admin.htm"); return; }   /* Pamela has no client account */
+      loadProfile();
+      loadAppointments();
+      loadAnalyses();
+    });
+  </script>
+
+</body>
+</html>

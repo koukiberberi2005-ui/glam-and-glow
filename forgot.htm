@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Forgot Password · Glam & Glow</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+
+  <section class="signin-section">
+    <div class="signin-background">
+
+      <div class="signin-card">
+
+        <!-- LEFT VISUAL SIDE -->
+        <div class="signin-visual">
+          <img src="images/Logo.png" alt="Glam and Glow logo" />
+          <h2>It Happens</h2>
+          <p>We'll send you a link to choose a new password.</p>
+        </div>
+
+        <!-- RIGHT FORM SIDE -->
+        <div class="signin-form-side">
+          <h1>Forgot Password</h1>
+          <p>Enter the email you signed up with.</p>
+
+          <form id="forgot-form" novalidate>
+
+            <div class="input-box">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" placeholder="janedoe123@example.com" required />
+            </div>
+
+            <button type="submit" class="submit-btn">Send Reset Link</button>
+
+            <p class="form-note" id="form-note"></p>
+          </form>
+
+          <div class="account-switch">
+            <p>Remembered it?</p>
+            <a href="signin.htm">Sign in</a>
+          </div>
+
+          <a href="index.html" class="back-home">&#8592; Back to website</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/site.js"></script>
+  <script src="js/tracker.js"></script>
+
+  <script>
+    var form = document.getElementById("forgot-form");
+    var note = document.getElementById("form-note");
+    var submitBtn = form.querySelector(".submit-btn");
+
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      var email = document.getElementById("email").value.trim();
+
+      if (!email.includes("@") || !email.includes(".")) {
+        note.textContent = "Please enter a valid email address.";
+        return;
+      }
+
+      submitBtn.disabled = true;
+      note.textContent = "Sending...";
+
+      /* the email link opens reset.htm, where the new password is chosen */
+      var result = await sb.auth.resetPasswordForEmail(email, {
+        redirectTo: new URL("reset.htm", location.href).href
+      });
+
+      submitBtn.disabled = false;
+      note.textContent = result.error
+        ? errorMessage(result.error)
+        : "If an account exists for this email, a reset link is on its way. Check your inbox.";
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Glam & Glow 2</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script>document.documentElement.classList.add("js");</script>
+</head>
+
+<body>
+
+  <!--------------------------------------------------------- HEADER --------------------------------------------------------->
+  <header id="header">
+    <div class="container">
+      <nav>
+        <a href="#"><img src="images/Logo.png" alt="Glam and Glow logo" class="logo" /></a>
+
+        <button class="menu-toggle" id="menu-toggle" aria-label="Open menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+
+        <ul id="nav-menu">
+          <li><a href="#about">About Us</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#gallery">Gallery</a></li>
+          <li><a href="dermalytics.htm">Dermalytics</a></li>
+          <li><a href="#bookings">Bookings</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><a href="signin.htm" class="nav-cta">Sign in</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!--------------------------------------------------------- HERO SECTION --------------------------------------------------------->
+  <section class="image-container">
+    <img src="images/hero section cut.jpeg" alt="Glam and Glow hero image" class="bg-image" />
+
+    <span class="hero-blob blob-1"></span>
+    <span class="hero-blob blob-2"></span>
+
+    <div class="overlay-text">
+      <span class="hero-eyebrow">Medical Skincare Clinic · Kaslik</span>
+      <h2>
+        <span class="line">Your Skin,</span>
+        <span class="line">Confidence, and</span>
+        <span class="line">Well-Being deserve a bit of</span>
+        <span class="line accent">Glam &amp; Glow.</span>
+      </h2>
+      <div class="hero-actions">
+        <a href="#bookings" class="btn-glow">Book Now</a>
+        <a href="#services" class="btn-ghost">Explore Services</a>
+      </div>
+    </div>
+  </section>
+
+  <!--------------------------------------------------------- ABOUT SECTION --------------------------------------------------------->
+  <section id="about">
+    <div class="about-stage">
+
+      <!-- Desktop/tablet: photos sit left and right of the text.
+           Phones: the same two photos join together behind the text. -->
+      <div class="about-bg">
+        <div class="about-photo reveal reveal-left"><img src="images/about left.jpeg" alt="Clinic Exterior"></div>
+        <div class="about-photo reveal reveal-right"><img src="images/about right.png" alt="Clinic Exterior"></div>
+      </div>
+
+      <!-- TEXT CARD -->
+      <div class="about-text">
+        <h1 class="sub-title reveal">About Us</h1>
+
+        <p class="reveal" style="--d: .15s">
+          At Glam & Glow in Kaslik, we believe everyone deserves to feel confident in their own skin.
+          Founded by Pamela Nakad, a Biology graduate from the Lebanese University Hadath, Glam & Glow is built on scientific knowledge, continuous education, and a passion
+          for helping clients achieve healthy and radiant skin. Every treatment is tailored to the individual, ensuring a comfortable one-on-one experience focused
+          entirely on your needs. From Medical Skincare and Microneedling to Lash Lifting and Slimming Treatments, our services are designed to deliver safe,
+          effective, and lasting results. Our mission is simple: to make professional skincare accessible, luxurious, and personalized, so every client leaves
+          feeling confident, refreshed, glowing and alive.
+        </p>
+
+        <div class="stats">
+          <div class="stat reveal">
+            <span class="stat-number counter" data-target="9">0</span>
+            <small>Treatments</small>
+          </div>
+          <div class="stat reveal">
+            <span class="stat-number counter" data-target="16">0</span>
+            <small>Certifications</small>
+          </div>
+          <div class="stat reveal">
+            <span class="stat-number">1:1</span>
+            <small>Private Sessions</small>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!---------------------------------------------------------- TABS SECTION --------------------------------------------------------->
+  <section id="about-tabs">
+    <div class="tab-container">
+
+      <div class="tab-titles reveal">
+        <button class="tab-links active-link" onclick="opentab(event, 'history')">HISTORY</button>
+        <button class="tab-links" onclick="opentab(event, 'why-us')">WHY US</button>
+        <button class="tab-links" onclick="opentab(event, 'certifications')">CERTIFICATIONS</button>
+      </div>
+
+      <!--------------------------------------------------------- HISTORY --------------------------------------------------------->
+      <div class="tab-contents active-tab" id="history">
+        <div class="history-layout">
+
+          <div class="owner-frame reveal reveal-zoom">
+            <img src="images/white coat.jpeg" alt="Picture of Owner" class="owner-img" />
+          </div>
+
+          <div class="history-content">
+            <p class="history-intro reveal">
+              Glam & Glow began with a dream, courage, and a deep passion for beauty. What started as a love for
+              helping people feel confident grew into a private, calm, and professional medical skincare clinic
+              built on science, care, and real results.
+            </p>
+
+            <ul class="timeline">
+              <li class="reveal" style="--d: .05s">
+                <h4>The Spark</h4>
+                <p>Pamela started as a makeup artist and discovered how much she loved helping people feel beautiful.</p>
+              </li>
+              <li class="reveal" style="--d: .15s">
+                <h4>The First Step</h4>
+                <p>Encouraged by family, she took her first medical skincare course at Apilus Ghazir.</p>
+              </li>
+              <li class="reveal" style="--d: .25s">
+                <h4>The Challenge</h4>
+                <p>Finding the right location, machines, and trusted suppliers took patience and many long nights.</p>
+              </li>
+              <li class="reveal" style="--d: .35s">
+                <h4>Glam & Glow Today</h4>
+                <p>Grown through word of mouth, where every client feels cared for and confident.</p>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+
+      <!--------------------------------------------------------- WHY US --------------------------------------------------------->
+      <div class="tab-contents" id="why-us">
+        <section class="floating-why">
+          <div class="floating-container">
+
+            <div class="floating-heading reveal">
+              <h2>Why Choose Glam & Glow?</h2>
+              <p>A clinic built on skincare expertise, trust, privacy, and personalized care.</p>
+            </div>
+
+            <div class="floating-layout">
+
+              <div class="float-item item-1 reveal reveal-left">
+                <span class="float-num">01</span>
+                <h3>Expertise</h3>
+                <p>Professional skincare knowledge and continuous learning.</p>
+              </div>
+
+              <div class="float-item item-2 reveal reveal-right">
+                <span class="float-num">02</span>
+                <h3>Visible Results</h3>
+                <p>Treatments focused on real skin improvement.</p>
+              </div>
+
+              <div class="float-item item-3 reveal reveal-left" style="--d: .15s">
+                <span class="float-num">03</span>
+                <h3>Premium Products</h3>
+                <p>Carefully selected products and technologies.</p>
+              </div>
+
+              <div class="center-image reveal reveal-zoom">
+                <img src="images/professsional.jpeg" alt="Owner Glam and Glow">
+              </div>
+
+              <div class="float-item item-4 reveal reveal-right" style="--d: .15s">
+                <span class="float-num">04</span>
+                <h3>Privacy</h3>
+                <p>A calm and comfortable space for every client.</p>
+              </div>
+
+              <div class="float-item item-5 reveal reveal-left" style="--d: .3s">
+                <span class="float-num">05</span>
+                <h3>Personalized Care</h3>
+                <p>Every treatment is tailored to your unique needs.</p>
+              </div>
+
+              <div class="float-item item-6 reveal reveal-right" style="--d: .3s">
+                <span class="float-num">06</span>
+                <h3>Client Trust</h3>
+                <p>Built through recommendations and happy clients.</p>
+              </div>
+
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!--------------------------------------------------------- CERTIFICATIONS --------------------------------------------------------->
+      <div class="tab-contents" id="certifications">
+        <p class="cert-intro reveal">
+          Pamela continuously follows new certifications, professional trainings, and modern skincare techniques to keep
+          Glam and Glow updated with safe, effective, and advanced treatment methods.
+        </p>
+
+        <!-- Bubbles are placed randomly by JS. To add one, copy a <figure> line. -->
+        <div class="cert-field" id="cert-field">
+          <figure class="cert-bubble"><img src="Company Logos/ACBPT Logo.png" alt="ACBPT logo"><figcaption>ACBPT</figcaption></figure>
+          <figure class="cert-bubble"><img src="Company Logos/Apilus-Logo.png" alt="Apilus logo"><figcaption>Apilus</figcaption></figure>
+          <figure class="cert-bubble"><img src="Company Logos/CIS Logo.png" alt="CIS College logo"><figcaption>CIS College</figcaption></figure>
+          <figure class="cert-bubble"><img src="Company Logos/Lebanese University Logo.png" alt="Lebanese University logo"><figcaption>Lebanese University</figcaption></figure>
+          <figure class="cert-bubble"><img src="Company Logos/Maharat Logo.png" alt="Maharat logo"><figcaption>Maharat</figcaption></figure>
+          <figure class="cert-bubble"><img src="Company Logos/MediArt Logo.png" alt="MediArt Technology logo"><figcaption>MediArt Technology</figcaption></figure>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!--------------------------------------------------------- SERVICES --------------------------------------------------------->
+  <!-- FACIAL & BEAUTY TREATMENTS -->
+  <section class="service-section" id="services">
+    <h2 class="section-title reveal">Facial & Beauty Treatments</h2>
+
+    <div class="cards-grid">
+
+      <!-- Medical Skin Care -->
+      <div class="card reveal">
+        <div class="card-img"><img src="mockups/services/medical-skin-care-800.jpg" srcset="mockups/services/medical-skin-care-480.jpg 480w, mockups/services/medical-skin-care-800.jpg 800w, mockups/services/medical-skin-care-1200.jpg 1200w" sizes="(min-width: 1400px) 440px, 31vw" loading="lazy" class="card-img-top" alt="Medical Skin Care"></div>
+        <div class="card-body">
+          <h5 class="card-title">Medical Skin Care</h5>
+          <p class="card-text">Advanced skincare treatments designed to target acne, pigmentation, scars, and other skin concerns while improving overall skin health and appearance.</p>
+          <a href="#bookings" class="btn-primary" data-service-id="1">Book Now</a>
+        </div>
+      </div>
+
+      <!-- HydraFacial -->
+      <div class="card reveal">
+        <div class="card-img"><img src="mockups/services/hydrafacial-800.jpg" srcset="mockups/services/hydrafacial-480.jpg 480w, mockups/services/hydrafacial-800.jpg 800w, mockups/services/hydrafacial-1200.jpg 1200w" sizes="(min-width: 1400px) 440px, 31vw" loading="lazy" class="card-img-top" alt="HydraFacial"></div>
+        <div class="card-body">
+          <h5 class="card-title">HydraFacial</h5>
+          <p class="card-text">A deep cleansing and hydrating facial that exfoliates, extracts impurities, and infuses the skin with nourishing serums for an instant glow.</p>
+          <a href="#bookings" class="btn-primary" data-service-id="2">Book Now</a>
+        </div>
+      </div>
+
+      <!-- Microneedling -->
+      <div class="card reveal">
+        <div class="card-img"><img src="mockups/services/microneedling-800.jpg" srcset="mockups/services/microneedling-480.jpg 480w, mockups/services/microneedling-800.jpg 800w, mockups/services/microneedling-1200.jpg 1200w" sizes="(min-width: 1400px) 440px, 31vw" loading="lazy" class="card-img-top" alt="Microneedling"></div>
+        <div class="card-body">
+          <h5 class="card-title">Microneedling</h5>
+          <p class="card-text">A collagen-stimulating treatment that improves skin texture, reduces scars, minimizes pores, and promotes natural skin regeneration.</p>
+          <a href="#bookings" class="btn-primary" data-service-id="3">Book Now</a>
+        </div>
+      </div>
+
+      <!-- Chemical Peeling -->
+      <div class="card reveal">
+        <div class="card-img"><img src="mockups/services/chemical-peeling-800.jpg" srcset="mockups/services/chemical-peeling-480.jpg 480w, mockups/services/chemical-peeling-800.jpg 800w, mockups/services/chemical-peeling-1200.jpg 1200w" sizes="(min-width: 1400px) 440px, 31vw" loading="lazy" class="card-img-top" alt="Chemical Peeling"></div>
+        <div class="card-body">
+          <h5 class="card-title">Chemical Peeling</h5>
+          <p class="card-text">A skin-renewing treatment that exfoliates damaged skin layers to reveal a brighter, smoother, and more even complexion.</p>
+          <a href="#bookings" class="btn-primary" data-service-id="4">Book Now</a>
+        </div>
+      </div>
+
+      <!-- Lash Lifting -->
+      <div class="card reveal">
+        <div class="card-img"><img src="mockups/services/lash-lifting-800.jpg" srcset="mockups/services/lash-lifting-480.jpg 480w, mockups/services/lash-lifting-800.jpg 800w, mockups/services/lash-lifting-1200.jpg 1200w" sizes="(min-width: 1400px) 440px, 31vw" loading="lazy" class="card-img-top" alt="Lash Lifting"></div>
+        <div class="card-body">
+          <h5 class="card-title">Lash Lifting</h5>
+          <p class="card-text">Enhances your natural lashes by lifting and curling them, creating a longer, fuller appearance without extensions.</p>
+          <a href="#bookings" class="btn-primary" data-service-id="5">Book Now</a>
+        </div>
+      </div>
+
+      <!-- Eyebrow Lamination -->
+      <div class="card reveal">
+        <div class="card-img"><img src="mockups/services/eyebrow-lamination-800.jpg" srcset="mockups/services/eyebrow-lamination-480.jpg 480w, mockups/services/eyebrow-lamination-800.jpg 800w, mockups/services/eyebrow-lamination-1200.jpg 1200w" sizes="(min-width: 1400px) 440px, 31vw" loading="lazy" class="card-img-top" alt="Eyebrow Lamination"></div>
+        <div class="card-body">
+          <h5 class="card-title">Eyebrow Lamination</h5>
+          <p class="card-text">A brow styling treatment that lifts and shapes eyebrow hairs to create a fuller, more defined, and polished look.</p>
+          <a href="#bookings" class="btn-primary" data-service-id="6">Book Now</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SLIMMING & BODY CONTOURING -->
+  <section class="service-section">
+    <h2 class="section-title reveal">Slimming & Body Contouring</h2>
+
+    <div class="cards-grid">
+
+      <!-- G5 -->
+      <div class="card reveal">
+        <div class="card-img"><img src="mockups/services/g5-massage-800.jpg" srcset="mockups/services/g5-massage-480.jpg 480w, mockups/services/g5-massage-800.jpg 800w, mockups/services/g5-massage-1200.jpg 1200w" sizes="(min-width: 1400px) 440px, 31vw" loading="lazy" class="card-img-top" alt="G5 Massage"></div>
+        <div class="card-body">
+          <h5 class="card-title">G5 Massage</h5>
+          <p class="card-text">Mechanical massage therapy that stimulates circulation, reduces cellulite, and improves skin firmness.</p>
+          <a href="#bookings" class="btn-primary" data-service-id="7">Book Now</a>
+        </div>
+      </div>
+
+      <!-- Maderotherapy -->
+      <div class="card reveal">
+        <div class="card-img"><img src="mockups/services/maderotherapy-800.jpg" srcset="mockups/services/maderotherapy-480.jpg 480w, mockups/services/maderotherapy-800.jpg 800w, mockups/services/maderotherapy-1200.jpg 1200w" sizes="(min-width: 1400px) 440px, 31vw" loading="lazy" class="card-img-top" alt="Maderotherapy"></div>
+        <div class="card-body">
+          <h5 class="card-title">Maderotherapy</h5>
+          <p class="card-text">A natural body sculpting technique using specially designed wooden tools to promote lymphatic drainage and body contouring.</p>
+          <a href="#bookings" class="btn-primary" data-service-id="8">Book Now</a>
+        </div>
+      </div>
+
+      <!-- Cavitation -->
+      <div class="card reveal">
+        <div class="card-img"><img src="mockups/services/cavitation-800.jpg" srcset="mockups/services/cavitation-480.jpg 480w, mockups/services/cavitation-800.jpg 800w, mockups/services/cavitation-1200.jpg 1200w" sizes="(min-width: 1400px) 440px, 31vw" loading="lazy" class="card-img-top" alt="Cavitation"></div>
+        <div class="card-body">
+          <h5 class="card-title">Cavitation</h5>
+          <p class="card-text">Ultrasound technology that targets localized fat deposits to support body shaping and slimming goals.</p>
+          <a href="#bookings" class="btn-primary" data-service-id="9">Book Now</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!--------------------------------------------------------- GALLERY (BEFORE / AFTER) --------------------------------------------------------->
+  <section class="gallery-section" id="gallery">
+    <div class="gallery-container">
+      <h2 class="section-title reveal">Before & After</h2>
+      <p class="gallery-subtitle reveal">Real clients, real results. Drag the slider to see the transformation.</p>
+
+      <!-- Replace before/after images and treatment names. Copy a .ba-card block to add more. -->
+      <div class="ba-grid">
+
+        <div class="ba-card reveal">
+          <div class="ba-slider">
+            <img src="mockups/gallery/hydrafacial-after-640.jpg" srcset="mockups/gallery/hydrafacial-after-400.jpg 400w, mockups/gallery/hydrafacial-after-640.jpg 640w, mockups/gallery/hydrafacial-after-960.jpg 960w" sizes="(min-width: 1500px) 480px, 31vw" loading="lazy" alt="After treatment">
+            <img src="mockups/gallery/hydrafacial-before-640.jpg" srcset="mockups/gallery/hydrafacial-before-400.jpg 400w, mockups/gallery/hydrafacial-before-640.jpg 640w, mockups/gallery/hydrafacial-before-960.jpg 960w" sizes="(min-width: 1500px) 480px, 31vw" loading="lazy" alt="Before treatment" class="ba-before">
+            <span class="ba-tag ba-tag-before">Before</span>
+            <span class="ba-tag ba-tag-after">After</span>
+            <span class="ba-line"></span>
+            <input type="range" min="0" max="100" value="50" class="ba-range" aria-label="Compare before and after">
+          </div>
+          <h3>HydraFacial</h3>
+        </div>
+
+        <div class="ba-card reveal">
+          <div class="ba-slider">
+            <img src="mockups/gallery/microneedling-after-640.jpg" srcset="mockups/gallery/microneedling-after-400.jpg 400w, mockups/gallery/microneedling-after-640.jpg 640w, mockups/gallery/microneedling-after-960.jpg 960w" sizes="(min-width: 1500px) 480px, 31vw" loading="lazy" alt="After treatment">
+            <img src="mockups/gallery/microneedling-before-640.jpg" srcset="mockups/gallery/microneedling-before-400.jpg 400w, mockups/gallery/microneedling-before-640.jpg 640w, mockups/gallery/microneedling-before-960.jpg 960w" sizes="(min-width: 1500px) 480px, 31vw" loading="lazy" alt="Before treatment" class="ba-before">
+            <span class="ba-tag ba-tag-before">Before</span>
+            <span class="ba-tag ba-tag-after">After</span>
+            <span class="ba-line"></span>
+            <input type="range" min="0" max="100" value="50" class="ba-range" aria-label="Compare before and after">
+          </div>
+          <h3>Microneedling</h3>
+        </div>
+
+        <div class="ba-card reveal">
+          <div class="ba-slider">
+            <img src="mockups/gallery/chemical-peeling-after-640.jpg" srcset="mockups/gallery/chemical-peeling-after-400.jpg 400w, mockups/gallery/chemical-peeling-after-640.jpg 640w, mockups/gallery/chemical-peeling-after-960.jpg 960w" sizes="(min-width: 1500px) 480px, 31vw" loading="lazy" alt="After treatment">
+            <img src="mockups/gallery/chemical-peeling-before-640.jpg" srcset="mockups/gallery/chemical-peeling-before-400.jpg 400w, mockups/gallery/chemical-peeling-before-640.jpg 640w, mockups/gallery/chemical-peeling-before-960.jpg 960w" sizes="(min-width: 1500px) 480px, 31vw" loading="lazy" alt="Before treatment" class="ba-before">
+            <span class="ba-tag ba-tag-before">Before</span>
+            <span class="ba-tag ba-tag-after">After</span>
+            <span class="ba-line"></span>
+            <input type="range" min="0" max="100" value="50" class="ba-range" aria-label="Compare before and after">
+          </div>
+          <h3>Chemical Peeling</h3>
+        </div>
+
+        <div class="ba-card reveal">
+          <div class="ba-slider">
+            <img src="mockups/gallery/medical-skin-care-after-640.jpg" srcset="mockups/gallery/medical-skin-care-after-400.jpg 400w, mockups/gallery/medical-skin-care-after-640.jpg 640w, mockups/gallery/medical-skin-care-after-960.jpg 960w" sizes="(min-width: 1500px) 480px, 31vw" loading="lazy" alt="After treatment">
+            <img src="mockups/gallery/medical-skin-care-before-640.jpg" srcset="mockups/gallery/medical-skin-care-before-400.jpg 400w, mockups/gallery/medical-skin-care-before-640.jpg 640w, mockups/gallery/medical-skin-care-before-960.jpg 960w" sizes="(min-width: 1500px) 480px, 31vw" loading="lazy" alt="Before treatment" class="ba-before">
+            <span class="ba-tag ba-tag-before">Before</span>
+            <span class="ba-tag ba-tag-after">After</span>
+            <span class="ba-line"></span>
+            <input type="range" min="0" max="100" value="50" class="ba-range" aria-label="Compare before and after">
+          </div>
+          <h3>Medical Skin Care</h3>
+        </div>
+
+        <div class="ba-card reveal">
+          <div class="ba-slider">
+            <img src="mockups/gallery/lash-lifting-after-640.jpg" srcset="mockups/gallery/lash-lifting-after-400.jpg 400w, mockups/gallery/lash-lifting-after-640.jpg 640w, mockups/gallery/lash-lifting-after-960.jpg 960w" sizes="(min-width: 1500px) 480px, 31vw" loading="lazy" alt="After treatment">
+            <img src="mockups/gallery/lash-lifting-before-640.jpg" srcset="mockups/gallery/lash-lifting-before-400.jpg 400w, mockups/gallery/lash-lifting-before-640.jpg 640w, mockups/gallery/lash-lifting-before-960.jpg 960w" sizes="(min-width: 1500px) 480px, 31vw" loading="lazy" alt="Before treatment" class="ba-before">
+            <span class="ba-tag ba-tag-before">Before</span>
+            <span class="ba-tag ba-tag-after">After</span>
+            <span class="ba-line"></span>
+            <input type="range" min="0" max="100" value="50" class="ba-range" aria-label="Compare before and after">
+          </div>
+          <h3>Lash Lifting</h3>
+        </div>
+
+        <div class="ba-card reveal">
+          <div class="ba-slider">
+            <img src="mockups/gallery/eyebrow-lamination-after-640.jpg" srcset="mockups/gallery/eyebrow-lamination-after-400.jpg 400w, mockups/gallery/eyebrow-lamination-after-640.jpg 640w, mockups/gallery/eyebrow-lamination-after-960.jpg 960w" sizes="(min-width: 1500px) 480px, 31vw" loading="lazy" alt="After treatment">
+            <img src="mockups/gallery/eyebrow-lamination-before-640.jpg" srcset="mockups/gallery/eyebrow-lamination-before-400.jpg 400w, mockups/gallery/eyebrow-lamination-before-640.jpg 640w, mockups/gallery/eyebrow-lamination-before-960.jpg 960w" sizes="(min-width: 1500px) 480px, 31vw" loading="lazy" alt="Before treatment" class="ba-before">
+            <span class="ba-tag ba-tag-before">Before</span>
+            <span class="ba-tag ba-tag-after">After</span>
+            <span class="ba-line"></span>
+            <input type="range" min="0" max="100" value="50" class="ba-range" aria-label="Compare before and after">
+          </div>
+          <h3>Eyebrow Lamination</h3>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!--------------------------------------------------------- BOOKING --------------------------------------------------------->
+  <section class="booking-section" id="bookings">
+    <div class="booking-container">
+      <h2 class="booking-title reveal">Book Your Appointment</h2>
+      <p class="booking-subtitle reveal" style="--d: .1s">
+        Choose your treatment, preferred time, and start your Glam & Glow journey.
+      </p>
+
+      <!-- Filled by the BOOKING script below: treatments come from the database,
+           free times from get_available_slots. -->
+      <div class="booking-card reveal" style="--d: .2s">
+        <div class="booking-step">
+          <h3 class="step-title"><span>1</span> Choose your treatment</h3>
+          <div class="service-picker" id="service-picker"><p class="slots-note">Loading treatments…</p></div>
+        </div>
+
+        <div class="booking-step">
+          <h3 class="step-title"><span>2</span> Pick a day and time</h3>
+          <div id="slot-picker"></div>
+        </div>
+
+        <div class="booking-step">
+          <h3 class="step-title"><span>3</span> Confirm</h3>
+          <div class="booking-summary" id="booking-summary"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!--------------------------------------------------------- CONTACT --------------------------------------------------------->
+  <section class="contact-section" id="contact">
+    <div class="contact-container">
+      <h2 class="section-title reveal">Contact Us</h2>
+      <p class="gallery-subtitle reveal">Questions about a treatment? Call, message us on WhatsApp, or write to us below.</p>
+
+      <div class="contact-grid">
+
+        <!-- DETAILS + MAP -->
+        <div class="contact-card reveal reveal-left">
+          <ul class="contact-list">
+            <li><span class="contact-label">Address</span>Samaya Beach Resort, 793 Sea Road, Zouk Mikael, Keserwan-Jbeil, Lebanon</li>
+            <li><span class="contact-label">Phone</span><a href="tel:+9613110245">+961 3 110 245</a></li>
+            <li><span class="contact-label">Email</span><a href="mailto:pamela.nakad@dermalytics.com">pamela.nakad@dermalytics.com</a></li>
+            <li><span class="contact-label">Hours</span><span id="contact-hours">Tue – Fri 10:00 – 20:00 · Sat 11:00 – 15:00 · Sun &amp; Mon closed</span></li>
+          </ul>
+
+          <div class="contact-actions">
+            <a href="tel:+9613110245" class="btn-ghost" data-track="Call">Call</a>
+            <a href="https://wa.me/9613110245" target="_blank" rel="noopener" class="btn-glow" data-track="WhatsApp">WhatsApp</a>
+
+            <!-- Put the clinic's page addresses in these two links -->
+            <a href="#" class="social-icon" aria-label="Instagram" data-track="Instagram">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4.2" /><circle cx="17.3" cy="6.7" r="1.1" class="dot" /></svg>
+            </a>
+            <a href="#" class="social-icon" aria-label="Facebook" data-track="Facebook">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8h3V4.5h-3c-2.5 0-4 1.6-4 4V11H7.5v3.5H10V21h3.6v-6.5h3l.5-3.5h-3.5V8.8c0-.5.3-.8.8-.8z" class="fill" /></svg>
+            </a>
+          </div>
+
+          <iframe class="contact-map" title="Map of the clinic" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+            src="https://www.google.com/maps?q=33.976513,35.611359&amp;z=16&amp;output=embed"></iframe>
+        </div>
+
+        <!-- MESSAGE FORM -->
+        <form class="contact-card contact-form reveal reveal-right" id="contact-form" novalidate>
+          <h3>Send us a message</h3>
+
+          <div class="input-box">
+            <label for="contact-name">Name</label>
+            <input type="text" id="contact-name" maxlength="100" placeholder="Jane Doe" required />
+          </div>
+
+          <div class="form-row">
+            <div class="input-box">
+              <label for="contact-email">Email</label>
+              <input type="email" id="contact-email" maxlength="120" placeholder="janedoe123@example.com" required />
+            </div>
+            <div class="input-box">
+              <label for="contact-phone">Phone <small>(optional)</small></label>
+              <input type="tel" id="contact-phone" maxlength="20" placeholder="+961 70 000 000" />
+            </div>
+          </div>
+
+          <div class="input-box">
+            <label for="contact-message">Message</label>
+            <textarea id="contact-message" rows="5" maxlength="1000" placeholder="How can we help?" required></textarea>
+          </div>
+
+          <button type="submit" class="btn-glow" id="contact-send">Send Message</button>
+          <p class="form-note" id="contact-note"></p>
+        </form>
+
+      </div>
+    </div>
+  </section>
+
+  <!--------------------------------------------------------- FOOTER --------------------------------------------------------->
+  <footer class="site-footer">
+    <img src="images/Logo.png" alt="Glam and Glow logo" class="footer-logo" />
+    <ul class="footer-links">
+      <li><a href="#about">About Us</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#bookings">Bookings</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="terms.htm">Terms &amp; Privacy</a></li>
+    </ul>
+    <p>&copy; 2026 Glam & Glow · Kaslik, Lebanon</p>
+  </footer>
+
+  <!-- BACK TO TOP -->
+  <a href="#" id="back-to-top" aria-label="Back to top">&#8593;</a>
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/site.js"></script>
+  <script src="js/tracker.js"></script>
+  <script src="js/booking.js"></script>
+
+  <script>
+    /* ===================== TABS ===================== */
+    var tablinks = document.getElementsByClassName("tab-links");
+    var tabcontents = document.getElementsByClassName("tab-contents");
+
+    function opentab(event, tabname) {
+      for (var i = 0; i < tablinks.length; i++) {
+        tablinks[i].classList.remove("active-link");
+      }
+      for (var j = 0; j < tabcontents.length; j++) {
+        tabcontents[j].classList.remove("active-tab");
+      }
+      event.currentTarget.classList.add("active-link");
+      document.getElementById(tabname).classList.add("active-tab");
+      if (tabname === "certifications") placeBubbles();
+    }
+
+    /* ===================== CERTIFICATION BUBBLES ===================== */
+    var certField = document.getElementById("cert-field");
+    var bubbles = certField.querySelectorAll(".cert-bubble");
+
+    /* small decorative bubbles in the background */
+    for (var b = 0; b < 10; b++) {
+      var dot = document.createElement("span");
+      dot.className = "cert-dot";
+      certField.appendChild(dot);
+    }
+    var dots = certField.querySelectorAll(".cert-dot");
+
+    function rand(min, max) {
+      return min + Math.random() * (max - min);
+    }
+
+    function placeBubbles() {
+      var W = certField.clientWidth;
+      if (W === 0) return; /* tab hidden */
+
+      var base = Math.max(105, Math.min(W * 0.15, 200));
+      var H = W < 600 ? base * 4.6 : base * 2.6;
+      var gap = window.matchMedia("(hover: none)").matches ? 48 : 26; /* room for drifting (+ always-visible names on touch) */
+      var placed = [];
+
+      for (var i = 0; i < bubbles.length; i++) {
+        var size = base * rand(0.82, 1.12);
+        var x, y, best = -1, tries = 0;
+
+        /* try many random spots, keep the one farthest from the other bubbles */
+        while (best < 0) {
+          for (var c = 0; c < 40; c++) {
+            var cx = rand(10, W - size - 10);
+            var cy = rand(10, H - size - 40); /* leave space for the caption */
+            var minGap = Infinity;
+            placed.forEach(function (p) {
+              var dx = (cx + size / 2) - (p.x + p.s / 2);
+              var dy = (cy + size / 2) - (p.y + p.s / 2);
+              minGap = Math.min(minGap, Math.sqrt(dx * dx + dy * dy) - (size + p.s) / 2);
+            });
+            if (minGap > gap && minGap > best) {
+              best = minGap;
+              x = cx;
+              y = cy;
+            }
+          }
+          tries++;
+          if (best < 0 && tries > 8) { H += 40; tries = 0; } /* no room: grow the field */
+        }
+
+        placed.push({ x: x, y: y, s: size });
+
+        var el = bubbles[i];
+        el.style.left = x + "px";
+        el.style.top = y + "px";
+        el.style.setProperty("--size", size + "px");
+        el.style.setProperty("--dx", rand(-18, 18) + "px");
+        el.style.setProperty("--dy", rand(10, 20) + "px");
+        el.style.setProperty("--dur", rand(7, 11) + "s");
+        el.style.setProperty("--delay", rand(-10, 0) + "s");
+        el.style.setProperty("--pop", (i * 0.12) + "s");
+      }
+
+      dots.forEach(function (dot) {
+        var s = rand(14, 46);
+        dot.style.width = s + "px";
+        dot.style.height = s + "px";
+        dot.style.left = rand(0, W - s) + "px";
+        dot.style.top = rand(0, H - s) + "px";
+        dot.style.setProperty("--dx", rand(-30, 30) + "px");
+        dot.style.setProperty("--dy", rand(15, 35) + "px");
+        dot.style.setProperty("--dur", rand(9, 16) + "s");
+        dot.style.setProperty("--delay", rand(-16, 0) + "s");
+      });
+
+      certField.style.height = H + "px";
+
+      /* replay the pop-in */
+      certField.classList.remove("popped");
+      void certField.offsetWidth;
+      certField.classList.add("popped");
+    }
+
+    var resizeTimer;
+    var lastWidth = window.innerWidth;
+    window.addEventListener("resize", function () {
+      if (window.innerWidth === lastWidth) return; /* ignore mobile address-bar resizes */
+      lastWidth = window.innerWidth;
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(placeBubbles, 250);
+    });
+
+    /* ===================== HEADER + SCROLL ===================== */
+    var header = document.getElementById("header");
+    var backTop = document.getElementById("back-to-top");
+    var heroImg = document.querySelector(".bg-image");
+    var navLinks = document.querySelectorAll("#nav-menu a[href^='#']");
+
+    function updateActiveLink() {
+      var current = "";
+      navLinks.forEach(function (link) {
+        var id = link.getAttribute("href");
+        if (id.length < 2) return;
+        var section = document.querySelector(id);
+        if (section && section.getBoundingClientRect().top <= 140) current = id;
+      });
+      navLinks.forEach(function (link) {
+        link.classList.toggle("active", link.getAttribute("href") === current);
+      });
+    }
+
+    window.addEventListener("scroll", function () {
+      var y = window.scrollY;
+      header.classList.toggle("scrolled", y > 40);
+      backTop.classList.toggle("show", y > 600);
+      if (heroImg && window.innerWidth > 768 && y < window.innerHeight) {
+        heroImg.style.transform = "translateY(" + y * 0.3 + "px)";
+      }
+      updateActiveLink();
+    });
+
+    /* ===================== MOBILE MENU ===================== */
+    var menuToggle = document.getElementById("menu-toggle");
+    var navMenu = document.getElementById("nav-menu");
+
+    menuToggle.addEventListener("click", function () {
+      navMenu.classList.toggle("open");
+      menuToggle.classList.toggle("open");
+      menuToggle.setAttribute("aria-expanded", navMenu.classList.contains("open"));
+    });
+
+    navMenu.querySelectorAll("a").forEach(function (link) {
+      link.addEventListener("click", function () {
+        navMenu.classList.remove("open");
+        menuToggle.classList.remove("open");
+        menuToggle.setAttribute("aria-expanded", "false");
+      });
+    });
+
+    /* ===================== STAGGERED DELAYS ===================== */
+    function stagger(selector, perRow) {
+      document.querySelectorAll(selector).forEach(function (el, i) {
+        el.style.setProperty("--d", (i % perRow) * 0.12 + "s");
+      });
+    }
+    document.querySelectorAll(".cards-grid").forEach(function (grid) {
+      grid.querySelectorAll(".card").forEach(function (card, i) {
+        card.style.setProperty("--d", (i % 3) * 0.12 + "s");
+      });
+    });
+    stagger(".stats .stat", 3);
+    stagger(".ba-grid .ba-card", 3);
+
+    /* ===================== SCROLL REVEAL ===================== */
+    var revealObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll(".reveal").forEach(function (el) {
+      revealObserver.observe(el);
+    });
+
+    /* ===================== COUNTERS ===================== */
+    var counterObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var el = entry.target;
+        var target = parseInt(el.dataset.target);
+        var start = null;
+
+        function step(time) {
+          if (!start) start = time;
+          var progress = Math.min((time - start) / 1600, 1);
+          el.textContent = Math.floor(progress * target);
+          if (progress < 1) requestAnimationFrame(step);
+          else el.textContent = target;
+        }
+        requestAnimationFrame(step);
+        counterObserver.unobserve(el);
+      });
+    }, { threshold: 0.6 });
+
+    document.querySelectorAll(".counter").forEach(function (el) {
+      counterObserver.observe(el);
+    });
+
+    /* ===================== BEFORE / AFTER SLIDERS ===================== */
+    document.querySelectorAll(".ba-slider").forEach(function (slider) {
+      var range = slider.querySelector(".ba-range");
+      range.addEventListener("input", function () {
+        slider.style.setProperty("--pos", range.value + "%");
+      });
+    });
+
+    /* ===================== ACCOUNT BUTTON ===================== */
+    updateNavAccount();
+
+    /* ===================== BOOKING ===================== */
+    var services = [];
+    var chosen = { serviceId: null, date: null, slot: null };
+    var signedIn = false;
+    var params = new URLSearchParams(location.search);
+    var analysisId = params.get("analysis");   /* booked from a Dermalytics result */
+
+    var servicePicker = document.getElementById("service-picker");
+    var bookingSummary = document.getElementById("booking-summary");
+
+    var slotPicker = GGBooking.createPicker(document.getElementById("slot-picker"), {
+      onPick: function (date, slot) {
+        chosen.date = date;
+        chosen.slot = slot;
+        renderSummary();
+      },
+      onClear: function () {
+        chosen.slot = null;
+        renderSummary();
+      }
+    });
+
+    function findService(id) {
+      return services.find(function (s) { return s.service_id === id; });
+    }
+
+    function renderServices() {
+      var groups = {};
+      services.forEach(function (s) {
+        (groups[s.category] = groups[s.category] || []).push(s);
+      });
+
+      servicePicker.innerHTML = Object.keys(groups).map(function (category) {
+        return '<div class="service-group"><h4>' + escapeHtml(category) + '</h4><div class="service-options">' +
+          groups[category].map(function (s) {
+            return '<button type="button" class="service-option" data-id="' + s.service_id + '">' +
+              "<strong>" + escapeHtml(s.service_name) + "</strong>" +
+              "<small>" + s.duration_min + " min · $" + Number(s.current_price) + "</small></button>";
+          }).join("") + "</div></div>";
+      }).join("");
+
+      servicePicker.querySelectorAll(".service-option").forEach(function (btn) {
+        btn.addEventListener("click", function () { chooseService(+btn.dataset.id); });
+      });
+    }
+
+    function chooseService(id) {
+      if (!findService(id)) return;
+      chosen.serviceId = id;
+      chosen.slot = null;
+      servicePicker.querySelectorAll(".service-option").forEach(function (btn) {
+        btn.classList.toggle("selected", +btn.dataset.id === id);
+      });
+      renderSummary();
+      return slotPicker.setService(id);
+    }
+
+    function renderSummary(message) {
+      var service = findService(chosen.serviceId);
+
+      if (!service) {
+        bookingSummary.innerHTML = '<p class="slots-note">Choose a treatment to see the free times.</p>';
+        return;
+      }
+
+      var html = '<dl class="summary-list">' +
+        "<dt>Treatment</dt><dd>" + escapeHtml(service.service_name) + "</dd>" +
+        "<dt>Duration</dt><dd>" + service.duration_min + " minutes</dd>" +
+        "<dt>Price</dt><dd>$" + Number(service.current_price) + " (paid at the clinic)</dd>";
+
+      if (chosen.slot) {
+        html += "<dt>Date</dt><dd>" + formatDate(chosen.date) + "</dd>" +
+          "<dt>Time</dt><dd>" + formatTime(chosen.slot.start_time) + " – " + formatTime(chosen.slot.end_time) + "</dd>";
+      }
+      html += "</dl>";
+
+      if (analysisId) {
+        html += '<p class="summary-note">This booking will be linked to your Dermalytics skin analysis.</p>';
+      }
+
+      if (!chosen.slot) {
+        html += '<p class="slots-note">Pick a day and a time.</p>';
+      } else if (signedIn) {
+        html += '<button type="button" class="btn-glow" id="confirm-booking">Confirm Booking</button>';
+      } else {
+        html += '<a class="btn-glow" id="signin-to-book" href="signin.htm?next=' + encodeURIComponent("index.html" + location.search + "#bookings") + '">Sign in to book</a>' +
+          '<p class="summary-note">No account yet? <a href="signup.htm?next=' + encodeURIComponent("index.html" + location.search + "#bookings") + '" class="keep-booking">Create one</a> — it takes a minute.</p>';
+      }
+
+      html += '<p class="summary-note">You can cancel or reschedule from your account. Cancelling less than 24 hours before is recorded as a late cancellation.</p>';
+      if (message) html += '<p class="form-note">' + escapeHtml(message) + "</p>";
+
+      bookingSummary.innerHTML = html;
+
+      var confirmBtn = document.getElementById("confirm-booking");
+      if (confirmBtn) confirmBtn.addEventListener("click", confirmBooking);
+
+      /* remember the choice, so it is still selected after signing in */
+      bookingSummary.querySelectorAll("#signin-to-book, .keep-booking").forEach(function (link) {
+        link.addEventListener("click", function () {
+          try {
+            sessionStorage.setItem("gg_pending_booking", JSON.stringify({
+              serviceId: chosen.serviceId, date: chosen.date, time: chosen.slot.start_time
+            }));
+          } catch (e) {}
+        });
+      });
+    }
+
+    async function confirmBooking() {
+      var btn = document.getElementById("confirm-booking");
+      btn.disabled = true;
+      btn.textContent = "Booking…";
+
+      var service = findService(chosen.serviceId);
+      var result = await sb.rpc("book_appointment", {
+        p_service_id: chosen.serviceId,
+        p_date: chosen.date,
+        p_time: chosen.slot.start_time,
+        p_classification_id: analysisId ? +analysisId : null
+      });
+
+      if (result.error) {
+        chosen.slot = null;
+        renderSummary(errorMessage(result.error));
+        slotPicker.refresh();
+        return;
+      }
+
+      var booking = result.data[0];
+      GGTrack.event("Appointment Action", {
+        element: "confirm", pageUrl: "/book/confirm",
+        serviceId: chosen.serviceId, appointmentId: booking.appointment_id
+      });
+
+      bookingSummary.innerHTML =
+        '<div class="booking-done">' +
+          "<h4>You're booked!</h4>" +
+          "<p>" + escapeHtml(service.service_name) + " on " + formatDate(chosen.date) + " at " + formatTime(chosen.slot.start_time) + ".</p>" +
+          '<p>Booking reference <strong>' + escapeHtml(booking.booking_reference) + "</strong></p>" +
+          '<a href="account.htm" class="btn-glow">View my appointments</a>' +
+        "</div>";
+
+      chosen.slot = null;
+      analysisId = null;
+      slotPicker.refresh();
+    }
+
+    /* "Book Now" on a service card selects that treatment */
+    document.querySelectorAll("[data-service-id]").forEach(function (btn) {
+      btn.addEventListener("click", function () { chooseService(+btn.dataset.serviceId); });
+    });
+
+    async function initBooking() {
+      signedIn = !!(await getSession());
+      sb.auth.onAuthStateChange(function (_event, session) {
+        signedIn = !!session;
+      });
+
+      var result = await sb.from("services")
+        .select("service_id, service_name, category, duration_min, current_price")
+        .order("service_id");
+
+      if (result.error) {
+        servicePicker.innerHTML = '<p class="slots-note">Treatments could not be loaded. Please refresh the page.</p>';
+        return;
+      }
+      services = result.data;
+      renderServices();
+      renderSummary();
+
+      /* coming back after signing in: restore the treatment, day and time */
+      var pending = null;
+      try {
+        pending = JSON.parse(sessionStorage.getItem("gg_pending_booking"));
+        sessionStorage.removeItem("gg_pending_booking");
+      } catch (e) {}
+
+      var serviceId = pending ? pending.serviceId : +params.get("service");
+      if (!serviceId) return;
+      await chooseService(serviceId);
+
+      if (pending && pending.date) {
+        await slotPicker.selectDate(pending.date);
+        var label = formatTime(pending.time);
+        var slotBtn = Array.prototype.find.call(document.querySelectorAll("#slot-picker .slot"), function (b) {
+          return b.textContent === label;
+        });
+        if (slotBtn) slotBtn.click();
+        else renderSummary("That time was taken in the meantime. Please pick another one.");
+      }
+    }
+
+    initBooking();
+
+    /* ===================== CONTACT ===================== */
+    var contactForm = document.getElementById("contact-form");
+    var contactNote = document.getElementById("contact-note");
+    var contactSend = document.getElementById("contact-send");
+
+    /* opening hours straight from the database, e.g. "Tue – Fri 10:00 – 20:00" */
+    async function loadHours() {
+      var result = await sb.from("working_hours").select("day_of_week, day_name, is_open, open_time, close_time").order("day_of_week");
+      if (result.error || !result.data.length) return;
+
+      var groups = [];
+      result.data.forEach(function (d) {
+        var hours = d.is_open === "Y" ? d.open_time.slice(0, 5) + " – " + d.close_time.slice(0, 5) : "closed";
+        var last = groups[groups.length - 1];
+        if (last && last.hours === hours) last.to = d.day_name;
+        else groups.push({ from: d.day_name, to: d.day_name, hours: hours });
+      });
+
+      document.getElementById("contact-hours").innerHTML = groups.map(function (g) {
+        var days = g.from.slice(0, 3) + (g.to !== g.from ? " – " + g.to.slice(0, 3) : "");
+        return escapeHtml(days + " " + g.hours);
+      }).join("<br>");
+    }
+    loadHours();
+
+    contactForm.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      var name = document.getElementById("contact-name").value.trim();
+      var email = document.getElementById("contact-email").value.trim();
+      var phone = document.getElementById("contact-phone").value.trim();
+      var message = document.getElementById("contact-message").value.trim();
+
+      if (name === "" || message === "") { contactNote.textContent = "Please enter your name and a message."; return; }
+      if (!email.includes("@") || !email.includes(".")) { contactNote.textContent = "Please enter a valid email address."; return; }
+
+      contactSend.disabled = true;
+      contactNote.textContent = "Sending…";
+
+      var result = await sb.rpc("send_contact_message", {
+        p_full_name: name, p_email: email, p_phone: phone, p_message: message
+      });
+
+      contactSend.disabled = false;
+      if (result.error) { contactNote.textContent = errorMessage(result.error); return; }
+
+      contactForm.reset();
+      contactNote.textContent = "Thank you! Pamela will get back to you soon.";
+    });
+  </script>
+
+</body>
+</html>
