@@ -8,3 +8,14 @@ Certifications/
 # secrets of the model API (set them in Railway instead)
 dermalytics-api/.env
 __pycache__/
+
+# Power BI files contain a copy of the data: never publish
+*.pbix
+*.pbip
+*.SemanticModel/
+*.Report/
+.pbi/
+
+# original full-size photos stay on this computer; the site uses the web copies in images/web/
+images/gallery/
+images/about left pamela.jfif
