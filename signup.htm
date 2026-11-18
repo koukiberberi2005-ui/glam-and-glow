@@ -56,6 +56,23 @@
               <input type="tel" id="phone" name="phone" placeholder="+961 70 000 000" required />
             </div>
 
+            <!-- optional: helps Pamela choose the right treatments -->
+            <div class="form-row">
+              <div class="input-box">
+                <label for="gender">Gender <small>(optional)</small></label>
+                <select id="gender" name="gender">
+                  <option value="">Prefer not to say</option>
+                  <option value="Female">Female</option>
+                  <option value="Male">Male</option>
+                </select>
+              </div>
+
+              <div class="input-box">
+                <label for="dob">Date of Birth <small>(optional)</small></label>
+                <input type="date" id="dob" name="dob" />
+              </div>
+            </div>
+
             <div class="input-box">
               <label for="password">Password</label>
               <input type="password" id="password" name="password" placeholder="At least 8 characters" required minlength="8" />
@@ -149,6 +166,8 @@
       var lastname = document.getElementById("lastname").value.trim();
       var email = document.getElementById("email").value.trim();
       var phone = document.getElementById("phone").value.trim();
+      var gender = document.getElementById("gender").value;
+      var dob = document.getElementById("dob").value;      /* "1995-06-15" or "" */
       var password = passInput.value;
       var confirm = document.getElementById("confirm").value;
       var terms = document.getElementById("terms").checked;
@@ -173,6 +192,10 @@
         note.textContent = "The two passwords do not match.";
         return;
       }
+      if (dob && (dob < "1900-01-01" || parseDate(dob) > new Date(new Date().getFullYear() - 10, new Date().getMonth(), new Date().getDate()))) {
+        note.textContent = "Please enter a valid date of birth.";
+        return;
+      }
       if (!terms) {
         note.textContent = "Please accept the terms to continue.";
         return;
@@ -186,7 +209,7 @@
       var result = await sb.auth.signUp({
         email: email,
         password: password,
-        options: { data: { first_name: firstname, last_name: lastname, phone: phone } }
+        options: { data: { first_name: firstname, last_name: lastname, phone: phone, gender: gender, date_of_birth: dob } }
       });
 
       if (result.error) {

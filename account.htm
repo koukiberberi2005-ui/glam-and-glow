@@ -68,6 +68,21 @@
             <input type="tel" id="phone" required />
           </div>
 
+          <div class="form-row">
+            <div class="input-box">
+              <label for="gender">Gender <small>(optional)</small></label>
+              <select id="gender">
+                <option value="">Prefer not to say</option>
+                <option value="Female">Female</option>
+                <option value="Male">Male</option>
+              </select>
+            </div>
+            <div class="input-box">
+              <label for="dob">Date of Birth <small>(optional)</small></label>
+              <input type="date" id="dob" />
+            </div>
+          </div>
+
           <div class="panel-actions">
             <button type="submit" class="btn-glow">Save Changes</button>
             <button type="button" class="btn-ghost" id="signout">Sign Out</button>
@@ -161,7 +176,7 @@
     /* ===================== DETAILS ===================== */
     async function loadProfile() {
       var result = await sb.from("customers")
-        .select("customer_id, first_name, last_name, email, phone_number")
+        .select("customer_id, first_name, last_name, email, phone_number, gender, date_of_birth")
         .single();
 
       if (result.error) {
@@ -174,6 +189,8 @@
       document.getElementById("lastname").value = customer.last_name;
       document.getElementById("email").value = customer.email;
       document.getElementById("phone").value = customer.phone_number === "-" ? "" : customer.phone_number;
+      document.getElementById("gender").value = customer.gender || "";
+      document.getElementById("dob").value = customer.date_of_birth || "";
     }
 
     document.getElementById("profile-form").addEventListener("submit", async function (e) {
@@ -186,8 +203,12 @@
       if (first === "" || last === "") { note.textContent = "Please enter your first and last name."; return; }
       if (phone.replace(/[^0-9]/g, "").length < 8) { note.textContent = "Please enter a valid phone number."; return; }
 
+      var gender = document.getElementById("gender").value || null;
+      var dob = document.getElementById("dob").value || null;
+
+      /* age is worked out from the date of birth by the database */
       var result = await sb.from("customers")
-        .update({ first_name: first, last_name: last, phone_number: phone })
+        .update({ first_name: first, last_name: last, phone_number: phone, gender: gender, date_of_birth: dob })
         .eq("customer_id", customer.customer_id);
 
       note.textContent = result.error ? errorMessage(result.error) : "Your details were saved.";

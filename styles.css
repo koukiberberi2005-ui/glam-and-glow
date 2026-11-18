@@ -2132,6 +2132,8 @@ button.btn-ghost { border: 2px solid var(--old-rose); }
   color: var(--old-rose) !important;
 }
 
+.status-pill[hidden] { display: none !important; }
+
 .status-pill.status-5 { background: #e6f4ea; color: #3d7a50 !important; }
 .status-pill.status-3,
 .status-pill.status-4,
@@ -2576,6 +2578,48 @@ body.modal-open { overflow: hidden; }
 .input-box label small { font-weight: 400; color: var(--grey); }
 
 .contact-form .btn-glow { font-size: 1.25rem; }
+
+/* admin: medical notes */
+.client-results {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.client-pick {
+  display: grid;
+  gap: 2px;
+  padding: 12px 16px;
+  border-radius: 18px;
+  border: 1px solid #f1d6df;
+  background: white;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color .3s ease, translate .3s ease;
+}
+
+.client-pick:hover { border-color: var(--pink-mist); translate: 0 -2px; }
+.client-pick strong { color: var(--dark-text); font-size: 1.15rem; }
+.client-pick span { color: var(--grey); font-size: .98rem; }
+
+.notes-client {
+  font-size: var(--text-h3);
+  color: var(--dark-text);
+  margin: 6px 0 12px;
+}
+
+.note-form {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px dashed #f1d6df;
+}
+
+.note-form h4 {
+  font-size: 1.25rem;
+  color: var(--old-rose);
+  margin-bottom: 12px;
+}
 
 /* admin: messages */
 .message-card {

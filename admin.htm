@@ -72,6 +72,49 @@
         <p class="form-note" id="note"></p>
       </section>
 
+      <!-- MEDICAL NOTES -->
+      <section class="panel" id="notes-panel">
+        <h2 class="panel-title">Medical notes</h2>
+        <div class="input-box">
+          <label for="client-search">Find a client (name, phone or email)</label>
+          <input type="search" id="client-search" placeholder="e.g. Maya or 70 356" autocomplete="off" />
+        </div>
+        <div id="client-results" class="client-results"></div>
+
+        <div id="client-notes" hidden>
+          <h3 class="notes-client" id="notes-client"></h3>
+          <div id="notes-history" class="appt-list"></div>
+
+          <form id="note-form" class="note-form" novalidate>
+            <h4>Add a note from today's session</h4>
+            <div class="form-row">
+              <div class="input-box">
+                <label for="note-skin">Skin type</label>
+                <select id="note-skin" required>
+                  <option value="">Choose…</option>
+                  <option>Normal</option><option>Dry</option><option>Oily</option>
+                  <option>Combination</option><option>Sensitive</option>
+                </select>
+              </div>
+              <div class="input-box">
+                <label for="note-allergies">Allergies</label>
+                <input type="text" id="note-allergies" maxlength="100" placeholder="None known" />
+              </div>
+            </div>
+            <div class="input-box">
+              <label for="note-conditions">Skin conditions</label>
+              <input type="text" id="note-conditions" maxlength="200" placeholder="e.g. Acne, Melasma" />
+            </div>
+            <div class="input-box">
+              <label for="note-text">Notes</label>
+              <textarea id="note-text" rows="3" maxlength="300" placeholder="What was done, how the skin reacted, what to do next time"></textarea>
+            </div>
+            <button type="submit" class="btn-glow small">Save note</button>
+            <p class="form-note" id="note-status"></p>
+          </form>
+        </div>
+      </section>
+
       <!-- CONTACT FORM MESSAGES -->
       <section class="panel">
         <h2 class="panel-title">Messages <span class="status-pill" id="unread-count" hidden></span></h2>
@@ -193,6 +236,7 @@
             html += '<div class="admin-actions">' +
               '<button type="button" class="btn-ghost small' + (r.status_id === 5 ? " chosen" : "") + '" data-attend="5" data-i="' + i + '">Completed</button>' +
               '<button type="button" class="btn-ghost small danger' + (r.status_id === 6 ? " chosen" : "") + '" data-attend="6" data-i="' + i + '">No Show</button>' +
+              '<button type="button" class="btn-ghost small" data-notes="' + escapeHtml(r.client_phone) + '">Medical notes</button>' +
             "</div>";
           } else {
             html += '<div class="admin-actions"><span class="slots-note">Upcoming</span></div>';
@@ -266,6 +310,95 @@
       if (result.error) { note.textContent = errorMessage(result.error); return; }
       loadDay();
     }
+
+    /* ===================== MEDICAL NOTES ===================== */
+    var clientSearch = document.getElementById("client-search");
+    var clientResults = document.getElementById("client-results");
+    var notesBox = document.getElementById("client-notes");
+    var noteForm = document.getElementById("note-form");
+    var noteStatus = document.getElementById("note-status");
+    var notesClient = null;     /* { customer_id, client_name } */
+    var searchTimer;
+
+    async function searchClients() {
+      var q = clientSearch.value.trim();
+      if (q.length < 2) { clientResults.innerHTML = ""; return; }
+
+      var result = await sb.rpc("admin_search_clients", { p_query: q });
+      if (result.error) { clientResults.innerHTML = '<p class="slots-note">' + escapeHtml(errorMessage(result.error)) + "</p>"; return; }
+      if (!result.data.length) { clientResults.innerHTML = '<p class="slots-note">No client found.</p>'; return; }
+
+      clientResults.innerHTML = result.data.map(function (c, i) {
+        return '<button type="button" class="client-pick" data-i="' + i + '">' +
+          "<strong>" + escapeHtml(c.client_name) + "</strong>" +
+          "<span>" + escapeHtml(c.phone_number) + " · " + c.notes_count + " note" + (c.notes_count == 1 ? "" : "s") + "</span></button>";
+      }).join("");
+
+      clientResults.querySelectorAll(".client-pick").forEach(function (btn) {
+        btn.addEventListener("click", function () { openNotes(result.data[+btn.dataset.i]); });
+      });
+    }
+
+    clientSearch.addEventListener("input", function () {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(searchClients, 300);
+    });
+
+    async function openNotes(client) {
+      notesClient = client;
+      clientResults.innerHTML = "";
+      clientSearch.value = client.client_name;
+      document.getElementById("notes-client").textContent = client.client_name;
+      noteForm.reset();
+      noteStatus.textContent = "";
+      notesBox.hidden = false;
+      await loadNotes();
+    }
+
+    async function loadNotes() {
+      var box = document.getElementById("notes-history");
+      var result = await sb.rpc("admin_client_notes", { p_customer_id: notesClient.customer_id });
+      if (result.error) { box.innerHTML = '<p class="slots-note">' + escapeHtml(errorMessage(result.error)) + "</p>"; return; }
+      if (!result.data.length) { box.innerHTML = '<p class="slots-note">No notes yet for this client.</p>'; return; }
+
+      /* the latest skin type is the most useful default for the new note */
+      document.getElementById("note-skin").value = result.data[0].skin_type;
+
+      box.innerHTML = result.data.map(function (n) {
+        return '<article class="message-card">' +
+          "<header><strong>" + escapeHtml(n.skin_type) + " skin</strong><span>" + formatDate(n.record_date) + "</span></header>" +
+          "<span><b>Conditions:</b> " + escapeHtml(n.conditions) + " · <b>Allergies:</b> " + escapeHtml(n.allergies) + "</span>" +
+          "<p>" + escapeHtml(n.notes) + "</p></article>";
+      }).join("");
+    }
+
+    noteForm.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      var skin = document.getElementById("note-skin").value;
+      if (!skin) { noteStatus.textContent = "Please choose the skin type."; return; }
+
+      var result = await sb.rpc("admin_add_medical_note", {
+        p_customer_id: notesClient.customer_id,
+        p_skin_type: skin,
+        p_conditions: document.getElementById("note-conditions").value,
+        p_allergies: document.getElementById("note-allergies").value,
+        p_notes: document.getElementById("note-text").value
+      });
+      if (result.error) { noteStatus.textContent = errorMessage(result.error); return; }
+
+      noteForm.reset();
+      noteStatus.textContent = "Note saved.";
+      loadNotes();
+    });
+
+    /* "Medical notes" on an appointment: open that client's notes */
+    list.addEventListener("click", async function (e) {
+      var btn = e.target.closest("[data-notes]");
+      if (!btn) return;
+      var result = await sb.rpc("admin_search_clients", { p_query: btn.dataset.notes });
+      if (result.data && result.data.length) openNotes(result.data[0]);
+      document.getElementById("notes-panel").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
 
     /* ===================== MESSAGES (contact form) ===================== */
     async function loadMessages() {
