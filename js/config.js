@@ -7,7 +7,7 @@ var SUPABASE_URL = "https://xkqxlibjerttzwcwapqh.supabase.co";
 var SUPABASE_ANON_KEY = "sb_publishable_aFtdltbGZkES0mkP2srr-g_qQUH860B";
 
 /* The Dermalytics model API on Railway, e.g. "https://dermalytics-api.up.railway.app" */
-var DERMALYTICS_API_URL = "PASTE_RAILWAY_API_URL";
+var DERMALYTICS_API_URL = "https://glam-and-glow-production.up.railway.app";
 
 
 /* ===================== SUPABASE CLIENT =====================
