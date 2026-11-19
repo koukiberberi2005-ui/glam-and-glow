@@ -103,6 +103,20 @@ def predict(image: UploadFile = File(...), authorization: str = Header(None)):
         raise HTTPException(415, "Please upload a JPG or PNG photo.")
     extension, mime = FORMATS[photo.format]
 
+    # 3-4. any failure from here on is reported as a readable message (and logged on Railway)
+    try:
+        return analyse(user, photo, data, extension, mime)
+    except HTTPException:
+        raise
+    except Exception as err:
+        print("Dermalytics error:", repr(err), flush=True)
+        message = str(getattr(err, "message", "") or err)
+        if "No customer for this account" in message:
+            raise HTTPException(403, "Dermalytics is for client accounts. Please sign in with a client account.")
+        raise HTTPException(500, f"The analysis failed: {message[:200]}")
+
+
+def analyse(user, photo, data, extension, mime):
     # 3. the model (exactly as in Colab: resize to 300 px, temperature-calibrated confidence)
     result = predictor.predict(photo)
     label = LABELS.get(result["predicted_class"], result["predicted_class"])
