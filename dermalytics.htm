@@ -92,6 +92,10 @@
           <p class="review-note" id="review-note" hidden>
             The model is not confident enough about this photo. Please book a consultation so Pamela can take a look.
           </p>
+          <p class="review-note" id="specialist-note" hidden>
+            Some features in this photo can look like a mole or skin lesion that should be checked.
+            Please see a dermatologist soon, or message us on WhatsApp so we can advise you.
+          </p>
         </div>
       </div>
       <div class="panel-actions">
@@ -212,6 +216,7 @@
       document.getElementById("result-photo").src = preview.src;
       document.getElementById("result-class").textContent = data.predicted_class;
       document.getElementById("review-note").hidden = !data.review_required;
+      document.getElementById("specialist-note").hidden = !data.see_specialist;
 
       document.getElementById("result-bars").innerHTML = data.predictions.map(function (p) {
         var percent = Math.round(p.confidence * 100);

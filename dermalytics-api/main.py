@@ -6,49 +6,56 @@ POST /predict
     header "Authorization: Bearer ..."  the visitor's Supabase sign-in token
 
     1. checks the sign-in token with Supabase (only signed-in customers may use it)
-    2. runs the trained skin model on the photo
+    2. runs the trained model through model/predict.py (the same code as in Colab)
     3. stores the photo in the private "skin-images" bucket and the result in the
        database (function save_skin_analysis -> IMAGE_UPLOADS + ML_CLASSIFICATIONS)
     4. returns the result to the website
 
-GET /   health check, shows the model version and its classes
+GET /   health check: model version, classes and test metrics
 """
 
 import io
-import json
 import os
+import sys
 import time
 import uuid
 
-import keras
-import numpy as np
 from fastapi import FastAPI, File, Header, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from PIL import Image, ImageOps
+from PIL import Image
 from supabase import create_client
 
-# ===================== SETTINGS (Railway → Variables) =====================
+# ===================================================================== settings (Railway → Variables)
 SUPABASE_URL = os.environ["SUPABASE_URL"]
 SUPABASE_SERVICE_KEY = os.environ["SUPABASE_SERVICE_KEY"]   # secret: server only, never in the website
-MODEL_PATH = os.environ.get("MODEL_PATH", "model/dermalytics.keras")
-CLASSES_PATH = os.environ.get("CLASSES_PATH", "model/classes.json")
-MODEL_VERSION = os.environ.get("MODEL_VERSION", "dermalytics-v1")
+MODEL_VERSION = os.environ.get("MODEL_VERSION", "derma-effnetv2b3-v3")
 ALLOWED_ORIGINS = os.environ.get("ALLOWED_ORIGINS", "*").split(",")
 
 MAX_BYTES = 5 * 1024 * 1024
 FORMATS = {"JPEG": ("jpg", "image/jpeg"), "PNG": ("png", "image/png")}
 
-# ===================== START-UP =====================
+# Readable names for the 11 classes of the model (same order as inference_config.json)
+LABELS = {
+    "Acne_Rosacea": "Acne & rosacea",
+    "Actinic_BCC_Malignant": "Actinic keratosis / skin cancer (BCC)",
+    "Bacterial_Infections": "Bacterial skin infection",
+    "Benign_Tumors_SebK": "Benign growth (seborrheic keratosis)",
+    "Eczema_Dermatitis": "Eczema / dermatitis",
+    "Fungal": "Fungal infection",
+    "Lupus_Connective": "Lupus / connective tissue",
+    "Melanoma_Nevi": "Mole / melanoma",
+    "Pigmentation": "Pigmentation disorder",
+    "Psoriasis_LichenPlanus": "Psoriasis / lichen planus",
+    "Warts_Molluscum": "Warts / molluscum",
+}
+
+# ===================================================================== start-up: load the model once
+MODEL_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "model")
+sys.path.insert(0, MODEL_DIR)
+from predict import DermalyticsPredictor   # noqa: E402  (model/predict.py exported from Colab)
+
+predictor = DermalyticsPredictor(MODEL_DIR)
 supabase = create_client(SUPABASE_URL, SUPABASE_SERVICE_KEY)
-
-model = keras.models.load_model(MODEL_PATH)
-with open(CLASSES_PATH, encoding="utf-8") as f:
-    CLASS_NAMES = json.load(f)          # same order as during training
-
-IMG_HEIGHT, IMG_WIDTH = model.input_shape[1], model.input_shape[2]
-
-if model.output_shape[-1] != len(CLASS_NAMES):
-    raise RuntimeError(f"The model has {model.output_shape[-1]} outputs but classes.json lists {len(CLASS_NAMES)} classes")
 
 app = FastAPI(title="Dermalytics API")
 app.add_middleware(
@@ -59,32 +66,16 @@ app.add_middleware(
 )
 
 
-# ===================== MODEL =====================
-def preprocess(image: Image.Image) -> np.ndarray:
-    """Turn the photo into exactly what the model saw during training."""
-    image = ImageOps.exif_transpose(image).convert("RGB")      # phone photos: apply the camera rotation
-    image = image.resize((IMG_WIDTH, IMG_HEIGHT))
-    pixels = np.asarray(image, dtype="float32")
-    # TODO: confirm from the Colab notebook. If the model does NOT start with a Rescaling
-    # layer / preprocess_input, the training scaling must be repeated here, e.g.:
-    #     pixels = pixels / 255.0
-    return np.expand_dims(pixels, axis=0)                       # a batch of one photo
-
-
-def classify(image: Image.Image) -> list:
-    """All classes with their confidence, most likely first."""
-    scores = model.predict(preprocess(image), verbose=0)[0]
-    if np.any(scores < 0) or not np.isclose(scores.sum(), 1.0, atol=1e-3):
-        scores = np.exp(scores - scores.max())                  # raw scores → probabilities (softmax)
-        scores = scores / scores.sum()
-    ranked = sorted(zip(CLASS_NAMES, scores.tolist()), key=lambda pair: pair[1], reverse=True)
-    return [{"label": label, "confidence": round(score, 4)} for label, score in ranked]
-
-
-# ===================== ROUTES =====================
+# ===================================================================== routes
 @app.get("/")
 def health():
-    return {"status": "ok", "model_version": MODEL_VERSION, "classes": CLASS_NAMES}
+    return {
+        "status": "ok",
+        "model_version": MODEL_VERSION,
+        "backbone": predictor.cfg["backbone"],
+        "classes": [LABELS.get(c, c) for c in predictor.classes],
+        "test_metrics": predictor.cfg.get("test_metrics"),
+    }
 
 
 @app.post("/predict")
@@ -112,9 +103,12 @@ def predict(image: UploadFile = File(...), authorization: str = Header(None)):
         raise HTTPException(415, "Please upload a JPG or PNG photo.")
     extension, mime = FORMATS[photo.format]
 
-    # 3. the model
-    predictions = classify(photo)
-    best = predictions[0]
+    # 3. the model (exactly as in Colab: resize to 300 px, temperature-calibrated confidence)
+    result = predictor.predict(photo)
+    label = LABELS.get(result["predicted_class"], result["predicted_class"])
+    review = result["confidence"] < predictor.cfg["confidence_threshold"]
+    # possible skin cancer (melanoma / BCC) above the alert level: advise seeing a specialist
+    see_specialist = result["high_risk_probability"] >= predictor.cfg["high_risk_alert"]
 
     # 4. keep the photo and the result
     path = f"{user.id}/{time.strftime('%Y%m%d-%H%M%S')}-{uuid.uuid4().hex[:8]}.{extension}"
@@ -124,15 +118,18 @@ def predict(image: UploadFile = File(...), authorization: str = Header(None)):
         "p_auth_id": user.id,
         "p_file_path": path,
         "p_file_format": extension.upper(),
-        "p_predicted_class": best["label"],
-        "p_confidence": best["confidence"],
+        "p_predicted_class": label,
+        "p_confidence": result["confidence"],
         "p_model_version": MODEL_VERSION,
     }).execute().data[0]
 
     return {
         "classification_id": saved["classification_id"],
-        "predicted_class": best["label"],
-        "confidence": best["confidence"],
-        "review_required": saved["review_required"] == "Y",
-        "predictions": predictions[:3],
+        "predicted_class": label,
+        "confidence": result["confidence"],
+        "review_required": review,
+        "see_specialist": see_specialist,
+        "predictions": [{"label": LABELS.get(t["class"], t["class"]), "confidence": t["probability"]}
+                        for t in result["top3"]],
+        "disclaimer": predictor.cfg["disclaimer"],
     }

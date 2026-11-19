@@ -2,7 +2,8 @@ fastapi==0.115.*
 uvicorn[standard]==0.32.*
 python-multipart==0.0.*
 pillow==11.*
-numpy<2.2
+numpy>=1.26,<2.3
 supabase==2.*
-# must match the TensorFlow version used in Colab (check with tf.__version__ in the notebook)
-tensorflow-cpu==2.19.*
+# same versions as the Colab training run (TensorFlow 2.21 / Keras 3.13)
+tensorflow==2.21.*
+keras==3.13.*

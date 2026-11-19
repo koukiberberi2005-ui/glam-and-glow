@@ -1,0 +1,55 @@
+{
+  "model_file": "dermalytics_model.keras",
+  "backbone": "EfficientNetV2B3",
+  "img_size": 300,
+  "input": "RGB, resized to img_size x img_size, pixel values 0-255 (no normalization needed)",
+  "classes": [
+    "Acne_Rosacea",
+    "Actinic_BCC_Malignant",
+    "Bacterial_Infections",
+    "Benign_Tumors_SebK",
+    "Eczema_Dermatitis",
+    "Fungal",
+    "Lupus_Connective",
+    "Melanoma_Nevi",
+    "Pigmentation",
+    "Psoriasis_LichenPlanus",
+    "Warts_Molluscum"
+  ],
+  "temperature": 1.0320339466627846,
+  "confidence_threshold": 0.67,
+  "high_risk_classes": [
+    "Actinic_BCC_Malignant",
+    "Melanoma_Nevi"
+  ],
+  "high_risk_alert": 0.2,
+  "urgency_map": {
+    "Actinic_BCC_Malignant": "High",
+    "Melanoma_Nevi": "High",
+    "Bacterial_Infections": "Moderate",
+    "Lupus_Connective": "Moderate",
+    "Psoriasis_LichenPlanus": "Moderate",
+    "Eczema_Dermatitis": "Moderate",
+    "Fungal": "Moderate",
+    "Acne_Rosacea": "Low",
+    "Pigmentation": "Low",
+    "Benign_Tumors_SebK": "Low",
+    "Warts_Molluscum": "Low"
+  },
+  "actions": {
+    "High": "Redirect to WhatsApp consultation with a skin care expert (BR-010, BR-035)",
+    "Moderate": "Recommend booking with prioritized availability (BR-009, BR-034)",
+    "Low": "Encourage booking a standard appointment (BR-008)",
+    "Manual Review Required": "Recommend manual expert review (BR-025)"
+  },
+  "disclaimer": "This result is an automated recommendation, not a medical diagnosis (BR-019).",
+  "test_metrics": {
+    "accuracy": 0.6731,
+    "balanced_acc": 0.6428,
+    "macro_f1": 0.6435,
+    "top3_acc": 0.8683,
+    "macro_auc": 0.9279
+  },
+  "trained_on": "DermNet (Kaggle shubhamgoel27/dermnet), 11 head/neck-relevant classes, deduplicated",
+  "created": "2026-11-18 12:00"
+}
