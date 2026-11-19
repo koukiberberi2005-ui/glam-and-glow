@@ -29,7 +29,8 @@ from supabase import create_client
 SUPABASE_URL = os.environ["SUPABASE_URL"]
 SUPABASE_SERVICE_KEY = os.environ["SUPABASE_SERVICE_KEY"]   # secret: server only, never in the website
 MODEL_VERSION = os.environ.get("MODEL_VERSION", "derma-effnetv2b3-v3")
-ALLOWED_ORIGINS = os.environ.get("ALLOWED_ORIGINS", "*").split(",")
+ALLOWED_ORIGINS = [o.strip().rstrip("/") for o in os.environ.get("ALLOWED_ORIGINS", "*").split(",") if o.strip()]
+LOCAL_TESTING = r"http://(localhost|127\.0\.0\.1)(:\d+)?"   # the site run on this computer while developing
 
 MAX_BYTES = 5 * 1024 * 1024
 FORMATS = {"JPEG": ("jpg", "image/jpeg"), "PNG": ("png", "image/png")}
@@ -61,6 +62,7 @@ app = FastAPI(title="Dermalytics API")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=ALLOWED_ORIGINS,
+    allow_origin_regex=LOCAL_TESTING,
     allow_methods=["GET", "POST"],
     allow_headers=["Authorization"],
 )
