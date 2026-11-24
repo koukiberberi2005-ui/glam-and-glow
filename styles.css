@@ -2621,6 +2621,40 @@ body.modal-open { overflow: hidden; }
   margin-bottom: 12px;
 }
 
+/* admin: a client's Dermalytics photos */
+.photos-title {
+  font-size: 1.25rem;
+  color: var(--old-rose);
+  margin: 18px 0 12px;
+}
+
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 110px);
+  gap: 10px;
+}
+
+.photo-card {
+  margin: 0;
+  border-radius: 18px;
+  overflow: hidden;
+  background: white;
+  border: 1px solid #f6e1e8;
+}
+
+.photo-card img, .photo-missing {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+.photo-missing { display: grid; place-items: center; background: var(--soft-white); color: var(--grey); font-size: .95rem; }
+.photo-card figcaption { display: grid; gap: 2px; padding: 6px 8px; }
+.photo-card strong { color: var(--dark-text); font-size: .85rem; line-height: 1.25; }
+.photo-card span { color: var(--grey); font-size: .78rem; }
+.photo-card .photo-review { color: var(--old-rose); font-weight: 600; }
+
 /* admin: messages */
 .message-card {
   padding: 16px 20px;

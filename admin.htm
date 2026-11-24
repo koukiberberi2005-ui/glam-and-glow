@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Clinic Admin · Glam & Glow</title>
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css?v=2" />
 </head>
 
 <body>
@@ -85,6 +85,9 @@
           <h3 class="notes-client" id="notes-client"></h3>
           <div id="notes-history" class="appt-list"></div>
 
+          <h4 class="photos-title">Dermalytics photos</h4>
+          <div id="client-photos" class="photo-grid"></div>
+
           <form id="note-form" class="note-form" novalidate>
             <h4>Add a note from today's session</h4>
             <div class="form-row">
@@ -137,7 +140,6 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/config.js"></script>
   <script src="js/site.js"></script>
-
   <script>
     initMenu();
 
@@ -352,7 +354,33 @@
       noteForm.reset();
       noteStatus.textContent = "";
       notesBox.hidden = false;
-      await loadNotes();
+      await Promise.all([loadNotes(), loadPhotos()]);
+    }
+
+    /* the client's Dermalytics photos: private files, opened with links valid for 1 hour */
+    async function loadPhotos() {
+      var box = document.getElementById("client-photos");
+      box.innerHTML = '<p class="slots-note">Loading…</p>';
+      var result = await sb.rpc("admin_client_analyses", { p_customer_id: notesClient.customer_id });
+      if (result.error) { box.innerHTML = '<p class="slots-note">' + escapeHtml(errorMessage(result.error)) + "</p>"; return; }
+      if (!result.data.length) { box.innerHTML = '<p class="slots-note">No Dermalytics photos from this client.</p>'; return; }
+
+      var links = await sb.storage.from("skin-images")
+        .createSignedUrls(result.data.map(function (a) { return a.file_path; }), 3600);
+      var urls = {};
+      (links.data || []).forEach(function (l) { if (l.signedUrl) urls[l.path] = l.signedUrl; });
+
+      box.innerHTML = result.data.map(function (a) {
+        var url = urls[a.file_path];
+        var img = url
+          ? '<a href="' + url + '" target="_blank" rel="noopener"><img src="' + url + '" alt="Skin photo" loading="lazy" /></a>'
+          : '<div class="photo-missing">Photo unavailable</div>';
+        return '<figure class="photo-card">' + img + "<figcaption>" +
+          "<strong>" + escapeHtml(a.predicted_class || "Not classified") + "</strong>" +
+          "<span>" + Math.round(a.confidence * 100) + "% · " + parseDate(a.uploaded_at.slice(0, 10)).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) + "</span>" +
+          (a.review_required === "Y" ? '<span class="photo-review">Needs review</span>' : "") +
+          "</figcaption></figure>";
+      }).join("");
     }
 
     async function loadNotes() {
