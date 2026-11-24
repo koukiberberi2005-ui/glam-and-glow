@@ -54,6 +54,7 @@ LABELS = {
 MODEL_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "model")
 sys.path.insert(0, MODEL_DIR)
 from predict import DermalyticsPredictor   # noqa: E402  (model/predict.py exported from Colab)
+from skin_check import looks_like_skin      # noqa: E402  (refuses photos that are not of skin)
 
 predictor = DermalyticsPredictor(MODEL_DIR)
 supabase = create_client(SUPABASE_URL, SUPABASE_SERVICE_KEY)
@@ -104,6 +105,12 @@ def predict(image: UploadFile = File(...), authorization: str = Header(None)):
     if photo.format not in FORMATS:
         raise HTTPException(415, "Please upload a JPG or PNG photo.")
     extension, mime = FORMATS[photo.format]
+
+    # is it a photo of skin? (the model would otherwise name a skin condition for anything)
+    # refused photos are not saved and not sent to the model
+    if not looks_like_skin(photo):
+        raise HTTPException(422, "This doesn't look like a photo of skin. Please take a clear, "
+                                 "close photo of the skin area that concerns you, in good light.")
 
     # 3-4. any failure from here on is reported as a readable message (and logged on Railway)
     try:
