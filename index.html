@@ -978,6 +978,31 @@
     }
     loadHours();
 
+    /* signed-in clients: name, email and phone are filled in from their account
+       (only empty fields, so anything typed is kept; visitors fill them in themselves) */
+    var contactProfile = null;
+
+    function fillContactDetails() {
+      if (!contactProfile) return;
+      var fields = {
+        "contact-name": (contactProfile.first_name + " " + contactProfile.last_name).trim(),
+        "contact-email": contactProfile.email,
+        "contact-phone": contactProfile.phone_number
+      };
+      Object.keys(fields).forEach(function (id) {
+        var input = document.getElementById(id);
+        if (!input.value && fields[id]) input.value = fields[id];
+      });
+    }
+
+    getSession().then(async function (session) {
+      if (!session) return;
+      var result = await sb.from("customers").select("first_name, last_name, email, phone_number").maybeSingle();
+      if (result.error || !result.data) return;   /* e.g. Pamela's admin account has no client profile */
+      contactProfile = result.data;
+      fillContactDetails();
+    });
+
     contactForm.addEventListener("submit", async function (e) {
       e.preventDefault();
       var name = document.getElementById("contact-name").value.trim();
@@ -999,6 +1024,7 @@
       if (result.error) { contactNote.textContent = errorMessage(result.error); return; }
 
       contactForm.reset();
+      fillContactDetails();   /* ready for another message */
       contactNote.textContent = "Thank you! Pamela will get back to you soon.";
     });
   </script>
