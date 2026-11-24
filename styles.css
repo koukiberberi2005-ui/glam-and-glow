@@ -2854,6 +2854,7 @@ body.modal-open { overflow: hidden; }
   .center-image img {
     border-radius: 28px;
     border-width: 6px;
+    object-position: 50% 10%;   /* the banner keeps her face, not the middle of the jacket */
   }
 
   .floating-layout .float-item {
