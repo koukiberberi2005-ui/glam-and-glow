@@ -86,11 +86,12 @@
       <div class="result-layout">
         <img id="result-photo" alt="Analyzed photo" />
         <div>
-          <p class="result-label">Most likely</p>
-          <p class="result-class" id="result-class"></p>
-          <div class="confidence" id="result-bars"></div>
-          <p class="review-note" id="review-note" hidden>
-            The model is not confident enough about this photo. Please book a consultation so Pamela can take a look.
+          <p class="result-label">AI suggestion</p>
+          <p class="result-intro">Based on your photo, the condition <strong>may be one of these three</strong>:</p>
+          <ul class="result-list" id="result-list"></ul>
+          <p class="result-caution">
+            This is an automated AI prediction, not a diagnosis. It can be wrong, and your skin may have
+            a condition that is not on this list. Only a specialist who examines your skin can confirm it.
           </p>
           <p class="review-note" id="specialist-note" hidden>
             Some features in this photo can look like a mole or skin lesion that should be checked.
@@ -214,14 +215,11 @@
     function showResult(data) {
       note.textContent = "";
       document.getElementById("result-photo").src = preview.src;
-      document.getElementById("result-class").textContent = data.predicted_class;
-      document.getElementById("review-note").hidden = !data.review_required;
       document.getElementById("specialist-note").hidden = !data.see_specialist;
 
-      document.getElementById("result-bars").innerHTML = data.predictions.map(function (p) {
-        var percent = Math.round(p.confidence * 100);
-        return '<div class="bar-row"><span>' + escapeHtml(p.label) + "</span>" +
-          '<div class="bar"><span style="width:' + percent + '%"></span></div><b>' + percent + "%</b></div>";
+      /* only the names of the 3 possible conditions: no percentages, so a guess is not read as a certainty */
+      document.getElementById("result-list").innerHTML = data.predictions.map(function (p) {
+        return "<li>" + escapeHtml(p.label) + "</li>";
       }).join("");
 
       document.getElementById("book-link").href = "index.html?service=1&analysis=" + data.classification_id + "#bookings";

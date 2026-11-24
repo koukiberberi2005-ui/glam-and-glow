@@ -2302,6 +2302,27 @@ body.modal-open { overflow: hidden; }
   margin-bottom: 16px;
 }
 
+.result-intro { font-size: 1.15rem !important; color: var(--dark-text); margin: 6px 0 10px; }
+
+.result-list {
+  list-style: none;
+  display: grid;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.result-list li {
+  padding: 10px 16px;
+  border-radius: 16px;
+  background: var(--soft-white);
+  border: 1px solid #f6e1e8;
+  color: var(--old-rose);
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.result-caution { font-size: 1rem !important; line-height: 1.5 !important; color: var(--grey); }
+
 .bar-row {
   display: grid;
   grid-template-columns: minmax(0, 150px) 1fr 50px;

@@ -392,10 +392,9 @@
         return '<article class="analysis-card">' +
           (url ? '<img src="' + escapeHtml(url) + '" alt="Uploaded skin photo" loading="lazy">' : '<div class="analysis-noimg">No photo</div>') +
           "<div>" +
+            "<span>AI suggestion (not a diagnosis)</span>" +
             "<strong>" + escapeHtml(r.predicted_class || "—") + "</strong>" +
-            "<span>" + Math.round(r.confidence_score * 100) + "% confidence</span>" +
             "<span>" + new Date(r.classified_at.replace(" ", "T")).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) + "</span>" +
-            (r.review_required === "Y" ? '<span class="status-pill status-4">Needs specialist review</span>' : "") +
             '<a class="btn-primary" href="index.html?service=1&analysis=' + r.classification_id + '#bookings">Book a consultation</a>' +
           "</div></article>";
       }).join("");
