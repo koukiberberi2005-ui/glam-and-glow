@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Glam & Glow 2</title>
-  <link rel="stylesheet" href="styles.css?v=9" />
+  <link rel="stylesheet" href="styles.css?v=21" />
   <script>document.documentElement.classList.add("js");</script>
 </head>
 
@@ -148,57 +148,44 @@
 
       <!--------------------------------------------------------- WHY US --------------------------------------------------------->
       <div class="tab-contents" id="why-us">
-        <section class="floating-why">
-          <div class="floating-container">
+        <!-- WHY US: portrait on the left, the 6 reasons on the right (fits on one screen) -->
+        <section class="floating-why why">
+          <figure class="why-photo reveal reveal-left">
+            <img src="images/professsional.jpeg" alt="Pamela Nakad, founder of Glam and Glow">
+            <figcaption><strong>Pamela Nakad</strong><span>Founder &amp; Skin Care Specialist</span></figcaption>
+          </figure>
 
-            <div class="floating-heading reveal">
-              <h2>Why Choose Glam & Glow?</h2>
-              <p>A clinic built on skincare expertise, trust, privacy, and personalized care.</p>
-            </div>
+          <div class="why-content">
+            <span class="why-eyebrow reveal">Why us</span>
+            <h2 class="reveal">Why Choose Glam &amp; Glow?</h2>
+            <p class="why-intro reveal">A clinic built on skincare expertise, trust, privacy, and personalized care.</p>
 
-            <div class="floating-layout">
-
-              <div class="float-item item-1 reveal reveal-left">
-                <span class="float-num">01</span>
-                <h3>Expertise</h3>
-                <p>Professional skincare knowledge and continuous learning.</p>
-              </div>
-
-              <div class="float-item item-2 reveal reveal-right">
-                <span class="float-num">02</span>
-                <h3>Visible Results</h3>
-                <p>Treatments focused on real skin improvement.</p>
-              </div>
-
-              <div class="float-item item-3 reveal reveal-left" style="--d: .15s">
-                <span class="float-num">03</span>
-                <h3>Premium Products</h3>
-                <p>Carefully selected products and technologies.</p>
-              </div>
-
-              <div class="center-image reveal reveal-zoom">
-                <img src="images/professsional.jpeg" alt="Owner Glam and Glow">
-              </div>
-
-              <div class="float-item item-4 reveal reveal-right" style="--d: .15s">
-                <span class="float-num">04</span>
-                <h3>Privacy</h3>
-                <p>A calm and comfortable space for every client.</p>
-              </div>
-
-              <div class="float-item item-5 reveal reveal-left" style="--d: .3s">
-                <span class="float-num">05</span>
-                <h3>Personalized Care</h3>
-                <p>Every treatment is tailored to your unique needs.</p>
-              </div>
-
-              <div class="float-item item-6 reveal reveal-right" style="--d: .3s">
-                <span class="float-num">06</span>
-                <h3>Client Trust</h3>
-                <p>Built through recommendations and happy clients.</p>
-              </div>
-
-            </div>
+            <ul class="why-list">
+              <li class="reveal" style="--d: 0.00s">
+                <span class="why-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9l9-5 9 5-9 5-9-5z"/><path d="M7 11.5V16c0 1.2 2.2 2.5 5 2.5s5-1.3 5-2.5v-4.5"/><path d="M21 9v5"/></svg></span>
+                <div><h3>Expertise</h3><p>Professional skincare knowledge and continuous learning.</p></div>
+              </li>
+              <li class="reveal" style="--d: 0.05s">
+                <span class="why-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 16l.7 1.8 1.8.7-1.8.7L19 21l-.7-1.8-1.8-.7 1.8-.7z"/></svg></span>
+                <div><h3>Visible Results</h3><p>Treatments focused on real skin improvement.</p></div>
+              </li>
+              <li class="reveal" style="--d: 0.10s">
+                <span class="why-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/><path d="M9.5 14.5a2.5 2.5 0 0 0 2.5 2.5"/></svg></span>
+                <div><h3>Premium Products</h3><p>Carefully selected products and technologies.</p></div>
+              </li>
+              <li class="reveal" style="--d: 0.15s">
+                <span class="why-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/><path d="M12 14.5v2.5"/></svg></span>
+                <div><h3>Privacy</h3><p>A calm and comfortable space for every client.</p></div>
+              </li>
+              <li class="reveal" style="--d: 0.20s">
+                <span class="why-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.3-7-9.5A4 4 0 0 1 12 8a4 4 0 0 1 7 2.5C19 15.7 12 20 12 20z"/></svg></span>
+                <div><h3>Personalized Care</h3><p>Every treatment is tailored to your unique needs.</p></div>
+              </li>
+              <li class="reveal" style="--d: 0.25s">
+                <span class="why-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8L3.5 9.7l5.9-.9z"/></svg></span>
+                <div><h3>Client Trust</h3><p>Built through recommendations and happy clients.</p></div>
+              </li>
+            </ul>
           </div>
         </section>
       </div>
@@ -529,7 +516,6 @@
   </footer>
 
   <!-- BACK TO TOP -->
-  <a href="#" id="back-to-top" aria-label="Back to top">&#8593;</a>
 
 
 
@@ -577,6 +563,15 @@
       if (W === 0) return; /* tab hidden */
 
       var base = Math.max(105, Math.min(W * 0.15, 200));
+      if (W >= 600) {
+        /* computers: the field must fit on screen below the header, the tab buttons and the intro.
+           Measure the real space: screen height - header - (tab buttons + intro above the field) - margin */
+        var header = document.getElementById("header");
+        var tabTitles = document.querySelector(".tab-titles");
+        var above = certField.getBoundingClientRect().top - tabTitles.getBoundingClientRect().top;
+        var room = window.innerHeight - (header ? header.offsetHeight : 0) - above - 30;
+        base = Math.max(80, Math.min(base, room / 2.6));
+      }
       var H = W < 600 ? base * 4.6 : base * 2.6;
       var gap = window.matchMedia("(hover: none)").matches ? 48 : 26; /* room for drifting (+ always-visible names on touch) */
       var placed = [];
@@ -650,7 +645,17 @@
 
     /* ===================== HEADER + SCROLL ===================== */
     var header = document.getElementById("header");
-    var backTop = document.getElementById("back-to-top");
+
+    /* the hero fills the screen below the header and the test banner (CSS uses --top-h) */
+    function updateTopHeight() {
+      var banner = document.getElementById("test-banner");
+      var top = header.offsetHeight + (banner ? banner.offsetHeight : 0);
+      document.documentElement.style.setProperty("--top-h", top + "px");
+      document.documentElement.style.setProperty("--header-h", header.offsetHeight + "px");   /* About Us fills the screen below the header */
+    }
+    updateTopHeight();
+    window.addEventListener("resize", updateTopHeight);
+    new MutationObserver(updateTopHeight).observe(document.body, { childList: true });   /* the banner is added a moment after loading */
     var heroImg = document.querySelector(".bg-image");
     var navLinks = document.querySelectorAll("#nav-menu a[href^='#']");
 
@@ -670,7 +675,6 @@
     window.addEventListener("scroll", function () {
       var y = window.scrollY;
       header.classList.toggle("scrolled", y > 40);
-      backTop.classList.toggle("show", y > 600);
       if (heroImg && window.innerWidth > 768 && y < window.innerHeight) {
         heroImg.style.transform = "translateY(" + y * 0.3 + "px)";
       }

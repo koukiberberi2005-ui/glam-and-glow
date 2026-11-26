@@ -39,7 +39,7 @@ body {
 }
 
 section[id] {
-  scroll-margin-top: 100px;
+  scroll-margin-top: var(--header-h, 100px);   /* menu links land the section just below the header */
 }
 
 img {
@@ -96,7 +96,7 @@ p {
   background: rgba(234, 200, 202, 0.92);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  padding: 6px 0;
+  padding: 3px 0;
   transition: padding .4s ease, background .4s ease, box-shadow .4s ease;
 }
 
@@ -109,7 +109,7 @@ p {
 #header .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 5px 20px;
+  padding: 3px 20px;
 }
 
 #header nav {
@@ -120,8 +120,8 @@ p {
 }
 
 #header .logo {
-  width: 75px;
-  height: 75px;
+  width: 66px;
+  height: 66px;
   object-fit: cover;
   border-radius: 50%;
   display: block;
@@ -764,6 +764,138 @@ p {
   right: -60px;
   opacity: .3;
   animation-delay: -6s;
+}
+
+/* ---------- WHY US (split layout: portrait + reasons) ---------- */
+.floating-why.why {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+  align-items: center;
+  gap: clamp(28px, 4vw, 64px);
+  padding: clamp(26px, 3.2vw, 52px);
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+.why > * { position: relative; z-index: 1; }   /* above the soft background blobs */
+
+.why-photo {
+  margin: 0;
+  height: clamp(380px, 60vh, 560px);
+  border-radius: 32px;
+  overflow: hidden;
+  box-shadow: 0 25px 60px rgba(194, 123, 152, .28);
+  border: 6px solid rgba(255, 255, 255, .85);
+}
+
+.why-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 15%;
+  display: block;
+}
+
+.why-photo figcaption {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 16px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, .88);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.why-photo figcaption strong { font-size: 1.25rem; color: var(--dark-text); line-height: 1.2; }
+.why-photo figcaption span   { font-size: .95rem; color: var(--old-rose); letter-spacing: .04em; }
+
+.why-eyebrow {
+  font-size: .95rem;
+  font-weight: 700;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--old-rose);
+}
+
+.why-content h2 {
+  font-size: clamp(2.2rem, 1.5rem + 1.7vw, 3.3rem);
+  line-height: 1.1;
+  color: var(--dark-text);
+  margin: 6px 0 10px;
+}
+
+.why-content .why-intro {
+  font-size: 1.2rem;
+  line-height: 1.5;
+  margin-bottom: 18px;
+}
+
+.why-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: clamp(20px, 2.5vw, 36px);
+}
+
+.why-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 0;
+  border-top: 1px solid rgba(194, 123, 152, .22);
+}
+
+.why-icon {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: white;
+  border: 1px solid #f1d6df;
+  color: var(--old-rose);
+  box-shadow: 0 6px 16px rgba(194, 123, 152, .14);
+}
+
+.why-icon svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.why-list h3 { font-size: 1.3rem; color: var(--dark-text); line-height: 1.25; margin-bottom: 2px; }
+.why-list p  { font-size: 1.05rem; line-height: 1.45; margin: 0; }
+
+/* tablets: portrait as a banner above, reasons in 2 columns */
+@media (max-width: 992px) {
+  .floating-why.why { grid-template-columns: 1fr; padding: 24px; border-radius: 30px; }
+  .why-photo { height: clamp(260px, 42vw, 380px); }
+  .why-photo img { object-position: 50% 12%; }
+}
+
+/* phones: shorter photo, reasons stay 2 per row with the icon above the text */
+@media (max-width: 640px) {
+  .floating-why.why { padding: 14px; gap: 16px; }
+  .why-photo { height: 230px; border-radius: 22px; border-width: 4px; }
+  .why-photo figcaption { left: 10px; right: 10px; bottom: 10px; padding: 7px 12px; }
+  .why-content h2 { font-size: 1.9rem; }
+  .why-content .why-intro { font-size: 1.05rem; margin-bottom: 10px; }
+  .why-list { column-gap: 14px; }
+  .why-list li { flex-direction: column; gap: 6px; padding: 12px 0; }
+  .why-icon { width: 36px; height: 36px; }
+  .why-icon svg { width: 18px; height: 18px; }
+  .why-list h3 { font-size: 1.12rem; }
+  .why-list p { font-size: .95rem; line-height: 1.35; }
 }
 
 .floating-container {
@@ -1981,9 +2113,7 @@ p {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
   gap: 10px;
-  max-height: 360px;
-  overflow-y: auto;
-  padding: 4px;
+  padding: 4px;   /* every free time is shown, no inner scroll bar */
 }
 
 .slot {
@@ -2764,7 +2894,7 @@ body.modal-open { overflow: hidden; }
 
 .site-footer {
   background: var(--cotton-rose);
-  padding: 50px 5% 30px;
+  padding: 32px 5% 20px;   /* a little less than before (50px top, 30px bottom) */
   text-align: center;
 }
 
@@ -2782,7 +2912,7 @@ body.modal-open { overflow: hidden; }
   flex-wrap: wrap;
   gap: 28px;
   list-style: none;
-  margin: 18px 0;
+  margin: 14px 0;
 }
 
 .footer-links a {
@@ -2800,39 +2930,6 @@ body.modal-open { overflow: hidden; }
 .site-footer p {
   font-size: 1.1rem;
   color: var(--old-rose);
-}
-
-/* ================================================================ BACK TO TOP ================================================================ */
-
-#back-to-top {
-  position: fixed;
-  right: 24px;
-  bottom: 24px;
-  z-index: 900;
-  width: 54px;
-  height: 54px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  background: linear-gradient(135deg, #ff9ecf, #d1a5ae);
-  color: white;
-  font-size: 1.6rem;
-  text-decoration: none;
-  box-shadow: 0 10px 25px rgba(255, 112, 167, 0.35);
-  opacity: 0;
-  visibility: hidden;
-  translate: 0 20px;
-  transition: opacity .4s ease, visibility .4s ease, translate .4s ease;
-}
-
-#back-to-top.show {
-  opacity: 1;
-  visibility: visible;
-  translate: 0 0;
-}
-
-#back-to-top:hover {
-  translate: 0 -5px;
 }
 
 /* ================================================================ RESPONSIVE ================================================================ */
@@ -3239,7 +3336,6 @@ body.modal-open { overflow: hidden; }
 
   .cert-bubble figcaption { max-width: 42vw; }
 
-  #back-to-top { right: 16px; bottom: 16px; width: 48px; height: 48px; }
 }
 
 @media (max-width: 360px) {
@@ -3265,8 +3361,8 @@ body.modal-open { overflow: hidden; }
   #header .container,
   #about-tabs { max-width: 1900px; }
 
-  #header .logo { width: 110px; height: 110px; }
-  #header.scrolled .logo { width: 80px; height: 80px; }
+  #header .logo { width: 92px; height: 92px; }
+  #header.scrolled .logo { width: 72px; height: 72px; }
 
   #header nav ul li a { font-size: clamp(2rem, 1.5vw, 2.8rem); }
 
@@ -3310,7 +3406,7 @@ body.modal-open { overflow: hidden; }
   #header .container,
   #about-tabs { max-width: 2300px; }
 
-  #header .logo { width: 140px; height: 140px; }
+  #header .logo { width: 118px; height: 118px; }
 
   p { font-size: clamp(2rem, 1.4vw, 3rem); }
 
@@ -3347,4 +3443,120 @@ body.modal-open { overflow: hidden; }
   }
 
   .about-photo img { animation: none !important; }
+}
+
+/* ================================================================
+   ABOUT TABS FIT ONE SCREEN (computers)
+   History, Why Us and Certifications size themselves to the screen HEIGHT, so the
+   tab buttons + the open tab are visible together without scrolling, also on laptops
+   with display scaling (e.g. 1280 x 650). Tablets and phones keep their own layout.
+   ================================================================ */
+@media (min-width: 993px) {
+  #about-tabs { padding-top: clamp(18px, 4vh, 80px); padding-bottom: clamp(18px, 4vh, 80px); }
+  .tab-contents { margin-top: clamp(14px, 3vh, 45px); }
+
+  /* HISTORY: the round portrait and the timeline cards shrink on short screens */
+  .history-layout { gap: clamp(36px, 5vw, 70px); }
+  .owner-frame { max-width: min(460px, calc(100vh - 300px)); margin: 16px auto; }
+  .history-intro { margin-bottom: clamp(12px, 3vh, 35px); line-height: 1.6; }
+  .timeline li { margin-bottom: clamp(8px, 2.2vh, 24px); padding: clamp(9px, 1.7vh, 18px) 22px; }
+  .timeline li::before { top: clamp(12px, 2.2vh, 24px); }
+  .timeline h4 { font-size: clamp(1.2rem, 2.3vh, 1.8rem); margin-bottom: 2px; }
+  .timeline p { font-size: clamp(.98rem, 1.9vh, 1.3rem); line-height: 1.4; }
+
+  /* WHY US: the portrait follows the screen height */
+  .floating-why.why { padding: clamp(18px, 3.5vh, 52px) clamp(22px, 3vw, 52px); }
+  .why-photo { height: clamp(300px, calc(100vh - 270px), 560px); }
+  .why-content h2 { font-size: clamp(2rem, 5vh, 3.3rem); }
+  .why-content .why-intro { margin-bottom: clamp(8px, 2vh, 18px); }
+  .why-list li { padding: clamp(9px, 1.8vh, 16px) 0; }
+
+  /* CERTIFICATIONS: the bubble field height is set by the script (see placeBubbles) */
+  .cert-intro { max-width: 1100px; margin-bottom: clamp(14px, 3vh, 45px); font-size: clamp(1.05rem, 2.2vh, 1.4rem); line-height: 1.6; }
+  .cert-field { min-height: 0; }
+}
+
+/* ================================================================
+   HERO FITS ONE SCREEN (computers)
+   The hero fills exactly the space below the header (+ test banner): --top-h is that
+   height, measured by the script in index.html. The title size also follows the screen
+   height so the 4 lines + buttons always fit; each line stays on one line.
+   ================================================================ */
+@media (min-width: 993px) {
+  .image-container {
+    min-height: 0;
+    height: calc(100vh - var(--top-h, 110px));
+    height: calc(100svh - var(--top-h, 110px));
+  }
+  .overlay-text { padding: 2vh 5%; }
+  .overlay-text h2 { font-size: min(4.2vw, 8.6vh); }
+  .overlay-text h2 .line { white-space: nowrap; }
+  .hero-eyebrow { margin-bottom: clamp(8px, 2vh, 22px); }
+  .hero-actions { margin-top: clamp(12px, 3vh, 36px); }
+}
+
+/* ================================================================
+   ABOUT US FITS ONE SCREEN (computers)
+   The section fills the screen below the header (--header-h, measured in index.html):
+   the two photos take that height and the title, text and stats scale with it.
+   ================================================================ */
+@media (min-width: 993px) {
+  #about {
+    min-height: 0;
+    height: calc(100svh - var(--header-h, 90px));
+    padding: clamp(14px, 3vh, 40px) 5%;
+    margin-top: clamp(24px, 5vh, 60px);   /* breathing space after the hero (outside the fitted screen) */
+  }
+  .about-photo {
+    height: calc(100svh - var(--header-h, 90px) - 2 * clamp(14px, 3vh, 40px));
+    min-height: 0;
+  }
+  .sub-title { font-size: clamp(2.6rem, 8vh, 6rem); margin-bottom: clamp(6px, 1.5vh, 20px); }
+  .sub-title::after { margin-top: clamp(4px, 1vh, 10px); }
+  .about-text p { font-size: clamp(1rem, 2.45vh, 1.6rem); line-height: 1.6; }
+  .stats { margin-top: clamp(12px, 3vh, 40px); gap: clamp(10px, 1.4vw, 18px); }
+  .stat { padding: clamp(8px, 1.8vh, 22px) 10px; }
+  .stat-number { font-size: clamp(1.8rem, 5.2vh, 3.6rem); margin-bottom: 2px; }
+  .stat small { font-size: clamp(.85rem, 1.8vh, 1.25rem); }
+}
+
+/* ================================================================
+   CONTACT FITS ONE SCREEN (computers)
+   The section fills the screen below the header (--header-h). Details sit in two
+   columns (address / phone / email | hours); the map and the message box stretch to
+   use the height that is left, so both cards end at the bottom of the screen.
+   ================================================================ */
+@media (min-width: 993px) {
+  .contact-section {
+    height: calc(100svh - var(--header-h, 90px));
+    padding: clamp(14px, 3vh, 40px) 5%;
+  }
+  .contact-container { height: 100%; display: flex; flex-direction: column; }
+  .contact-section .section-title { font-size: clamp(2rem, 6vh, 3.4rem); margin-bottom: clamp(8px, 2vh, 30px); }
+  .contact-section .section-title::after { margin: clamp(4px, .8vh, 12px) auto; }
+  .contact-section .gallery-subtitle { margin: 0 auto clamp(10px, 2.5vh, 40px); font-size: clamp(1rem, 2.3vh, 1.5rem) !important; }
+
+  .contact-grid { flex: 1; min-height: 0; }
+  .contact-card {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    padding: clamp(16px, 3vh, 40px) clamp(20px, 2.5vw, 40px);
+  }
+
+  .contact-list {
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    gap: clamp(6px, 1.4vh, 14px) 24px;
+    font-size: clamp(1rem, 2.2vh, 1.2rem);
+  }
+  .contact-list li:last-child { grid-column: 2; grid-row: 1 / span 3; }   /* opening hours on the right */
+  .contact-actions { margin: clamp(10px, 2.4vh, 24px) 0; }
+  .contact-map { flex: 1; height: auto; min-height: 110px; }
+
+  .contact-form h3 { font-size: clamp(1.4rem, 3.4vh, 2rem); margin-bottom: clamp(8px, 1.6vh, 18px); }
+  .contact-form .input-box { margin-bottom: clamp(8px, 1.8vh, 22px); }
+  .contact-form .input-box label { font-size: clamp(1rem, 2.2vh, 1.2rem); margin-bottom: 4px; }
+  .contact-form .input-box input { padding: clamp(8px, 1.5vh, 15px) 18px; }
+  .contact-form .input-box textarea { min-height: 70px; padding: clamp(8px, 1.5vh, 15px) 18px; resize: none; }
+  .contact-form .form-note:empty { display: none; }
 }
