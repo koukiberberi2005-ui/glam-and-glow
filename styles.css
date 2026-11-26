@@ -2676,6 +2676,23 @@ body.modal-open { overflow: hidden; }
 .photo-card span { color: var(--grey); font-size: .78rem; }
 .photo-card .photo-review { color: var(--old-rose); font-weight: 600; }
 
+/* admin: Power BI dashboard */
+.dashboard-frame {
+  margin-top: 12px;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid #f6e1e8;
+  background: var(--soft-white);
+}
+
+.dashboard-frame iframe { display: block; width: 100%; height: 100%; border: 0; }
+
+@media (max-width: 767px) {
+  .dashboard-frame { aspect-ratio: auto; height: 75vh; }
+}
+
 /* admin: messages */
 .message-card {
   padding: 16px 20px;

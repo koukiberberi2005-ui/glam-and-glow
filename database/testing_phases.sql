@@ -5,7 +5,7 @@
 --
 --   20 Oct 2026  internal testing: the team tests every feature (first tracked visit,
 --                sign-up and booking happened that day)
---   25 Nov 2026  external testing: the link is shared with selected people on WhatsApp
+--   24 Nov 2026  external testing: the link is shared with selected people on WhatsApp
 --
 -- Dermalytics has no launch date until the model API is online.
 -- =====================================================================================
@@ -16,7 +16,7 @@ UPDATE system_settings
  WHERE setting_key = 'WEBSITE_LAUNCH_DATE';
 
 INSERT INTO system_settings (setting_key, setting_value, description)
-VALUES ('EXTERNAL_TEST_START', '2026-11-25', 'Website link shared with selected external testers')
+VALUES ('EXTERNAL_TEST_START', '2026-11-24', 'Website link shared with selected external testers')
 ON CONFLICT (setting_key) DO UPDATE SET setting_value = EXCLUDED.setting_value, description = EXCLUDED.description;
 
 UPDATE system_settings
