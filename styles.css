@@ -1809,29 +1809,70 @@ p {
   box-shadow: 0 8px 18px rgba(255, 112, 167, 0.3);
 }
 
-/* treatments */
-.service-group + .service-group { margin-top: 18px; }
+/* treatments: category tabs + one-line options */
+.service-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+  overflow-x: auto;              /* phones: the tabs scroll sideways instead of wrapping */
+  scrollbar-width: none;
+}
+.service-tabs::-webkit-scrollbar { display: none; }
 
-.service-group h4 {
-  font-size: 1.05rem;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  color: var(--grey);
-  margin-bottom: 10px;
+.service-tab {
+  flex: none;
+  padding: 8px 18px;
+  border-radius: 30px;
+  border: 1px solid #f1d6df;
+  background: white;
+  color: var(--old-rose);
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .25s ease, color .25s ease, border-color .25s ease;
+}
+
+.service-tab:hover { border-color: var(--pink-mist); }
+
+/* phones: the tabs share the width equally, so every category is fully visible
+   (a long name like "Body Contouring" goes on two lines inside its tab) */
+@media (max-width: 640px) {
+  .service-tabs {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    gap: 6px;
+    overflow: visible;
+  }
+  .service-tab {
+    padding: 7px 6px;
+    border-radius: 18px;
+    font-size: 1rem;
+    line-height: 1.15;
+    text-align: center;
+  }
+}
+
+.service-tab.active {
+  background: linear-gradient(135deg, #ff9ecf, var(--old-rose));
+  border-color: transparent;
+  color: white;
+  box-shadow: 0 6px 16px rgba(255, 112, 167, .25);
 }
 
 .service-options {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 270px), 1fr));
+  gap: 10px;
 }
 
 .service-option {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
-  padding: 14px 18px;
-  border-radius: 22px;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 18px;
+  border-radius: 18px;
   border: 1px solid #f1d6df;
   background: white;
   text-align: left;
@@ -1839,8 +1880,10 @@ p {
   transition: border-color .3s ease, box-shadow .3s ease, translate .3s ease;
 }
 
-.service-option strong { font-size: 1.25rem; color: var(--dark-text); }
-.service-option small  { font-size: 1.05rem; color: var(--grey); }
+.service-option[hidden] { display: none; }
+
+.service-option strong { font-size: 1.2rem; color: var(--dark-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.service-option small  { flex: none; font-size: 1rem; color: var(--grey); white-space: nowrap; }
 
 .service-option:hover { translate: 0 -2px; box-shadow: var(--shadow-soft); }
 
@@ -2018,6 +2061,7 @@ button.btn-ghost { border: 2px solid var(--old-rose); }
 }
 
 .btn-ghost.small { font-size: 1.05rem !important; padding: .35em 1.1em; }
+
 
 .btn-ghost.danger { border-color: #d98a9a; color: #b85c70; }
 .btn-ghost.danger:hover { background: #b85c70; color: white; }
@@ -2495,7 +2539,7 @@ body.modal-open { overflow: hidden; }
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: clamp(18px, 3vw, 35px);
-  align-items: start;
+  align-items: stretch;   /* both boxes as tall as the taller one */
 }
 
 .contact-card {
@@ -2598,7 +2642,12 @@ body.modal-open { overflow: hidden; }
 
 .input-box label small { font-weight: 400; color: var(--grey); }
 
-.contact-form .btn-glow { font-size: 1.25rem; }
+.contact-form .btn-glow { font-size: 1.25rem; align-self: flex-start; }
+
+/* the message box grows so the form fills the same height as the details + map box */
+.contact-form { display: flex; flex-direction: column; }
+.contact-form .input-box:has(textarea) { flex: 1; display: flex; flex-direction: column; }
+.contact-form .input-box textarea { flex: 1; min-height: 140px; }
 
 /* admin: medical notes */
 .client-results {
@@ -2675,6 +2724,9 @@ body.modal-open { overflow: hidden; }
 .photo-card strong { color: var(--dark-text); font-size: .85rem; line-height: 1.25; }
 .photo-card span { color: var(--grey); font-size: .78rem; }
 .photo-card .photo-review { color: var(--old-rose); font-weight: 600; }
+
+/* My Account: confirmation after a booking */
+.appt-card.just-booked { border-color: var(--pink-mist); box-shadow: 0 0 0 3px rgba(231, 147, 175, .35); }
 
 /* admin: Power BI dashboard */
 .dashboard-frame {

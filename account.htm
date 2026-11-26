@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>My Account · Glam & Glow</title>
-  <link rel="stylesheet" href="styles.css?v=3" />
+  <link rel="stylesheet" href="styles.css?v=9" />
 </head>
 
 <body>
@@ -92,7 +92,7 @@
       </section>
 
       <!-- UPCOMING -->
-      <section class="panel">
+      <section class="panel" id="upcoming-panel">
         <h2 class="panel-title">Upcoming Appointments</h2>
         <div id="upcoming" class="appt-list"><p class="slots-note">Loading…</p></div>
         <div class="panel-actions">
@@ -221,6 +221,11 @@
     });
 
     /* ===================== APPOINTMENTS ===================== */
+    /* coming straight from a booking: account.htm?booked=<booking reference> */
+    var justBooked = new URLSearchParams(location.search).get("booked");
+    var shownBooking = false;
+    if (justBooked) history.replaceState(null, "", "account.htm");   /* the highlight does not come back on reload */
+
     async function loadAppointments() {
       var result = await sb.from("appointments")
         /* "!fk_..." names the foreign key to follow, because these tables are also linked through website_interactions */
@@ -243,7 +248,7 @@
 
       document.getElementById("upcoming").innerHTML = upcoming.length
         ? upcoming.map(function (a) {
-            return '<article class="appt-card">' +
+            return '<article class="appt-card' + (a.booking_reference && a.booking_reference === justBooked ? " just-booked" : "") + '">' +
               '<div class="appt-when"><strong>' + formatDate(a.appointment_date) + "</strong>" +
               "<span>" + formatTime(a.appointment_time) + " – " + formatTime(a.end_time) + "</span></div>" +
               '<div class="appt-what"><strong>' + escapeHtml(serviceName(a)) + "</strong>" +
@@ -254,6 +259,11 @@
               "</div></article>";
           }).join("")
         : '<p class="slots-note">No upcoming appointments.</p>';
+
+      if (justBooked && !shownBooking) {   /* show the new appointment once the list is there (only once) */
+        shownBooking = true;
+        document.getElementById("upcoming-panel").scrollIntoView({ behavior: "smooth", block: "start" });
+      }
 
       document.getElementById("history").innerHTML = history.length
         ? history.map(function (a) {

@@ -100,7 +100,7 @@ var GGTrack = (function () {
     if (!view) { queue.push(body); return; }
     body.p_page_view_id = view.id;
     body.p_view_token = view.token;
-    send("track_event", body);
+    send("track_event", body, true);   /* keepalive: still delivered if the page changes right after */
   }
 
   /* a short readable name for what was clicked */

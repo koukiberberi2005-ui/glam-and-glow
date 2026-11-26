@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Glam & Glow 2</title>
-  <link rel="stylesheet" href="styles.css?v=3" />
+  <link rel="stylesheet" href="styles.css?v=9" />
   <script>document.documentElement.classList.add("js");</script>
 </head>
 
@@ -459,14 +459,14 @@
         <div class="contact-card reveal reveal-left">
           <ul class="contact-list">
             <li><span class="contact-label">Address</span>Samaya Beach Resort, 793 Sea Road, Zouk Mikael, Keserwan-Jbeil, Lebanon</li>
-            <li><span class="contact-label">Phone</span><a href="tel:+9613110245">+961 3 110 245</a></li>
+            <li><span class="contact-label">Phone</span><a href="tel:+96176787113">+961 76 787 113</a></li>
             <li><span class="contact-label">Email</span><a href="mailto:pamela.nakad@dermalytics.com">pamela.nakad@dermalytics.com</a></li>
             <li><span class="contact-label">Hours</span><span id="contact-hours">Tue – Fri 10:00 – 20:00 · Sat 11:00 – 15:00 · Sun &amp; Mon closed</span></li>
           </ul>
 
           <div class="contact-actions">
-            <a href="tel:+9613110245" class="btn-ghost" data-track="Call">Call</a>
-            <a href="https://wa.me/9613110245" target="_blank" rel="noopener" class="btn-glow" data-track="WhatsApp">WhatsApp</a>
+            <a href="tel:+96176787113" class="btn-ghost" data-track="Call">Call</a>
+            <a href="https://wa.me/96176787113" target="_blank" rel="noopener" class="btn-glow" data-track="WhatsApp">WhatsApp</a>
 
             <!-- Put the clinic's page addresses in these two links -->
             <a href="#" class="social-icon" aria-label="Instagram" data-track="Instagram">
@@ -784,30 +784,54 @@
       return services.find(function (s) { return s.service_id === id; });
     }
 
-    function renderServices() {
-      var groups = {};
-      services.forEach(function (s) {
-        (groups[s.category] = groups[s.category] || []).push(s);
+    /* treatments: one tab per category, only that category's treatments are shown
+       (saves space); each treatment on one line: name + duration · price */
+    function showCategory(category) {
+      servicePicker.querySelectorAll(".service-tab").forEach(function (tab) {
+        var on = tab.dataset.cat === category;
+        tab.classList.toggle("active", on);
+        tab.setAttribute("aria-selected", on ? "true" : "false");
       });
-
-      servicePicker.innerHTML = Object.keys(groups).map(function (category) {
-        return '<div class="service-group"><h4>' + escapeHtml(category) + '</h4><div class="service-options">' +
-          groups[category].map(function (s) {
-            return '<button type="button" class="service-option" data-id="' + s.service_id + '">' +
-              "<strong>" + escapeHtml(s.service_name) + "</strong>" +
-              "<small>" + s.duration_min + " min · $" + Number(s.current_price) + "</small></button>";
-          }).join("") + "</div></div>";
-      }).join("");
-
       servicePicker.querySelectorAll(".service-option").forEach(function (btn) {
-        btn.addEventListener("click", function () { chooseService(+btn.dataset.id); });
+        btn.hidden = btn.dataset.cat !== category;
       });
     }
 
+    function renderServices() {
+      var categories = [];
+      services.forEach(function (s) {
+        if (categories.indexOf(s.category) === -1) categories.push(s.category);
+      });
+
+      servicePicker.innerHTML =
+        '<div class="service-tabs" role="tablist">' +
+          categories.map(function (c) {
+            return '<button type="button" class="service-tab" role="tab" data-cat="' + escapeHtml(c) + '">' + escapeHtml(c) + "</button>";
+          }).join("") +
+        "</div>" +
+        '<div class="service-options">' +
+          services.map(function (s) {
+            return '<button type="button" class="service-option" data-id="' + s.service_id + '" data-cat="' + escapeHtml(s.category) + '">' +
+              "<strong>" + escapeHtml(s.service_name) + "</strong>" +
+              "<small>" + s.duration_min + " min · $" + Number(s.current_price) + "</small></button>";
+          }).join("") +
+        "</div>";
+
+      servicePicker.querySelectorAll(".service-tab").forEach(function (tab) {
+        tab.addEventListener("click", function () { showCategory(tab.dataset.cat); });
+      });
+      servicePicker.querySelectorAll(".service-option").forEach(function (btn) {
+        btn.addEventListener("click", function () { chooseService(+btn.dataset.id); });
+      });
+      showCategory(categories[0]);
+    }
+
     function chooseService(id) {
-      if (!findService(id)) return;
+      var service = findService(id);
+      if (!service) return;
       chosen.serviceId = id;
       chosen.slot = null;
+      showCategory(service.category);   /* e.g. "Book Now" on a Lash card opens the Lash & Brow tab */
       servicePicker.querySelectorAll(".service-option").forEach(function (btn) {
         btn.classList.toggle("selected", +btn.dataset.id === id);
       });
@@ -898,12 +922,17 @@
           "<h4>You're booked!</h4>" +
           "<p>" + escapeHtml(service.service_name) + " on " + formatDate(chosen.date) + " at " + formatTime(chosen.slot.start_time) + ".</p>" +
           '<p>Booking reference <strong>' + escapeHtml(booking.booking_reference) + "</strong></p>" +
-          '<a href="account.htm" class="btn-glow">View my appointments</a>' +
+          '<p class="slots-note">Taking you to your appointments…</p>' +
+          '<a href="account.htm?booked=' + encodeURIComponent(booking.booking_reference) + '" class="btn-glow">View my appointments</a>' +
         "</div>";
 
       chosen.slot = null;
       analysisId = null;
-      slotPicker.refresh();
+
+      /* go to My Account, where the new appointment is shown and highlighted */
+      setTimeout(function () {
+        location.href = "account.htm?booked=" + encodeURIComponent(booking.booking_reference) + "#upcoming-panel";
+      }, 1800);
     }
 
     /* "Book Now" on a service card selects that treatment */
